@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 7235268080690332582}
   - component: {fileID: 5746051714653463015}
   - component: {fileID: 1302759856970153191}
-  m_Layer: 0
-  m_Name: Main Camera
+  m_Layer: 3
+  m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 3541634799233008983}
   - component: {fileID: 8144015376148120979}
   - component: {fileID: 8526562933704525040}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -287,8 +287,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7b05eb16dc13943a90b9f748cc7636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  characterController: {fileID: 8144015376148120979}
   playerCamera: {fileID: 7235268080690332582}
   sensitivity: 1
-  maxLookDown: -89
-  maxLookUp: 89
-  speed: 5
+  minLookAngle: -89
+  maxLookAngle: 89
+  moveSpeed: 10
+  groundOffset: 0.6
+  checkSphereRadius: 0.5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 55
+  isGrounded: 0
+  isSprinting: 0

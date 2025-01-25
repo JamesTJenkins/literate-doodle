@@ -2,24 +2,29 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
-	[Header("Camera")]
-	[SerializeField] private Camera playerCamera;
-	[SerializeField] private float sensitivity = 1;
-	[SerializeField] private float maxLookDown = -89f;
-	[SerializeField] private float maxLookUp = 89f;
-	[Header("Movement")]
-	[SerializeField] private float speed = 5f;
 
-	private CharacterController cc;
-	private InputSystem_Actions userInput = null;
+	public CharacterController characterController;
+	public InputSystem_Actions userInput;
+	public Camera playerCamera;
+
+	[Header("Looking")]
+	public float sensitivity = 1;
+	public float minLookAngle = -89f, maxLookAngle = 89f;
 	private float xRotation = 0f;
+	public bool invertLook;
+	[Header("Movement")]
+	public float moveSpeed = 5f;
+	public float groundOffset;
+	public float checkSphereRadius;
+	public LayerMask groundMask;
+	public bool isGrounded;
+	public bool isSprinting;
+
 
 	private void Start() {
 		userInput = new InputSystem_Actions();
 		userInput.Player.Look.performed += Looking;
 		userInput.Enable();
-
-		cc = GetComponent<CharacterController>();
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
@@ -31,24 +36,40 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		Vector2 input = userInput.Player.Move.ReadValue<Vector2>();
+		Moving(userInput.Player.Move.ReadValue<Vector2>());
 
-		transform.rotation = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0);
-
-		Vector3 moveVector = new Vector3(input.x, 0f, input.y);
-		Vector3 finalMovement = (transform.right * moveVector.x + transform.forward * moveVector.z) * speed * Time.fixedDeltaTime;
-
-		cc.Move(finalMovement);
+		if (Physics.CheckSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius, groundMask)) {
+			isGrounded = true;
+			Debug.Log("Grounded");
+		} else {
+			isGrounded = false;
+		}
 	}
 
 	private void Looking(InputAction.CallbackContext context) {
 		Vector2 mouse = context.ReadValue<Vector2>();
 		mouse *= sensitivity;
 
-		xRotation -= mouse.y;
-		xRotation = Mathf.Clamp(xRotation, maxLookDown, maxLookUp);
+		xRotation += invertLook ? mouse.y : -mouse.y;
+		xRotation = Mathf.Clamp(xRotation, minLookAngle, maxLookAngle);
 
 		playerCamera.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 		transform.Rotate(Vector3.up * mouse.x);
 	}
+
+	private void Moving(Vector2 input) {
+		transform.rotation = Quaternion.Euler(0f, playerCamera.transform.eulerAngles.y, 0f);
+
+		Vector3 gravity = isGrounded ? Vector3.zero : Vector3.up * Consts.Physics.GRAVITY;
+		Vector3 movement = transform.right * input.x + transform.forward * input.y + gravity;
+		Vector3 finalMovement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
+
+		characterController.Move(finalMovement);
+	}
+	/*TODO:
+	 * Add Sprinting
+	 * Add Interaction
+	 * Add Jumping?
+	 * Crouching?
+	*/
 }
