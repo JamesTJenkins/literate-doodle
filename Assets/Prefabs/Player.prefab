@@ -292,7 +292,8 @@ MonoBehaviour:
   sensitivity: 1
   minLookAngle: -89
   maxLookAngle: 89
-  moveSpeed: 10
+  invertLook: 0
+  moveSpeed: 5
   groundOffset: 0.6
   checkSphereRadius: 0.5
   groundMask:

@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour {
 
 		if (Physics.CheckSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius, groundMask)) {
 			isGrounded = true;
-			Debug.Log("Grounded");
 		} else {
 			isGrounded = false;
 		}
@@ -61,10 +60,15 @@ public class PlayerController : MonoBehaviour {
 		transform.rotation = Quaternion.Euler(0f, playerCamera.transform.eulerAngles.y, 0f);
 
 		Vector3 gravity = isGrounded ? Vector3.zero : Vector3.up * Consts.Physics.GRAVITY;
-		Vector3 movement = transform.right * input.x + transform.forward * input.y + gravity;
-		Vector3 finalMovement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
+		Vector3 movement = transform.right * input.x + transform.forward * input.y;
+		Vector3 finalMovement = (movement.normalized * moveSpeed + gravity) * Time.fixedDeltaTime;
 
 		characterController.Move(finalMovement);
+	}
+
+	private void OnDrawGizmosSelected() {
+		Gizmos.color = Color.green;
+		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
 	}
 	/*TODO:
 	 * Add Sprinting

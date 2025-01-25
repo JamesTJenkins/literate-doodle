@@ -349,11 +349,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!143 &1371106154 stripped
-CharacterController:
-  m_CorrespondingSourceObject: {fileID: 8144015376148120979, guid: 5fa80e15f5e6b7b4fa93c01943a4a976, type: 3}
-  m_PrefabInstance: {fileID: 1671861941}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1671861941
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -411,13 +406,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8526562933704525040, guid: 5fa80e15f5e6b7b4fa93c01943a4a976, type: 3}
-      propertyPath: moveSpeed
-      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8526562933704525040, guid: 5fa80e15f5e6b7b4fa93c01943a4a976, type: 3}
-      propertyPath: characterController
-      value: 
-      objectReference: {fileID: 1371106154}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
