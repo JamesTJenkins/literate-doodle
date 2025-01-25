@@ -11,13 +11,13 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] private float speed = 5f;
 
 	private CharacterController cc;
-	private InputSystem_Actions inputs = null;
+	private InputSystem_Actions userInput = null;
 	private float xRotation = 0f;
 
 	private void Start() {
-		inputs = new InputSystem_Actions();
-		inputs.Player.Look.performed += Looking;
-		inputs.Enable();
+		userInput = new InputSystem_Actions();
+		userInput.Player.Look.performed += Looking;
+		userInput.Enable();
 
 		cc = GetComponent<CharacterController>();
 
@@ -26,12 +26,12 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void OnDestroy() {
-		inputs.Player.Look.performed -= Looking;
-		inputs.Dispose();
+		userInput.Player.Look.performed -= Looking;
+		userInput.Dispose();
 	}
 
 	private void FixedUpdate() {
-		Vector2 input = inputs.Player.Move.ReadValue<Vector2>();
+		Vector2 input = userInput.Player.Move.ReadValue<Vector2>();
 
 		transform.rotation = Quaternion.Euler(0, playerCamera.transform.eulerAngles.y, 0);
 
