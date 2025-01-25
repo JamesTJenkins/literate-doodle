@@ -8,7 +8,7 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	public void Play() {
-		LoadScene(Consts.MAIN_LEVEL_NAME);
+		LoadScene(Consts.Menu.MAIN_LEVEL_NAME);
 	}
 
 	public void Quit() {
@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour {
 	}
 
 	private async void LoadScene(string levelName) {
-		_ = SceneManager.LoadSceneAsync(Consts.LOAD_LEVEL_NAME, LoadSceneMode.Single);
+		_ = SceneManager.LoadSceneAsync(Consts.Menu.LOAD_LEVEL_NAME, LoadSceneMode.Single);
 		AsyncOperation newLevel = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
 
 #if UNITY_EDITOR
