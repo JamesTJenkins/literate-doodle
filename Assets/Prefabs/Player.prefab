@@ -293,11 +293,10 @@ MonoBehaviour:
   minLookAngle: -89
   maxLookAngle: 89
   invertLook: 0
-  moveSpeed: 5
-  groundOffset: 0.6
-  checkSphereRadius: 0.5
+  movementBaseSpeed: 5
+  sprintingAddedSpeed: 2.5
   groundMask:
     serializedVersion: 2
     m_Bits: 55
-  isGrounded: 0
-  isSprinting: 0
+  checkSphereRadius: 0.5
+  groundOffset: 0.6
