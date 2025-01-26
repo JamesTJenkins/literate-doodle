@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7235268080690332582}
   - component: {fileID: 5746051714653463015}
   - component: {fileID: 1302759856970153191}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,9 +73,9 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 75eaeb57ce4dd4046894015359f50d6b, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 3541634799233008983}
   - component: {fileID: 8144015376148120979}
   - component: {fileID: 8526562933704525040}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -292,6 +292,7 @@ MonoBehaviour:
   sensitivity: 1
   minLookAngle: -89
   maxLookAngle: 89
+  invertLook: 0
   moveSpeed: 10
   groundOffset: 0.6
   checkSphereRadius: 0.5

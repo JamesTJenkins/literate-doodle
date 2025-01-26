@@ -10,7 +10,6 @@ Shader "Hidden/EdgeDetection"
         Tags { "RenderType"="Opaque" }
         
         ZWrite Off
-        Cull Off
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
