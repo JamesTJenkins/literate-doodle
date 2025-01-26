@@ -17,15 +17,15 @@ Shader "Hidden/EdgeDetection"
             Name "EDGE DETECTION OUTLINE"
             
             HLSLPROGRAM
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.high-definition/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl" // needed to sample scene depth
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareNormalsTexture.hlsl" // needed to sample scene normals
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl" // needed to sample scene color/luminance
+            #include "Packages/com.unity.render-pipelines.high-definition/ShaderLibrary/DeclareDepthTexture.hlsl" // needed to sample scene depth
+            #include "Packages/com.unity.render-pipelines.high-definition/ShaderLibrary/DeclareNormalsTexture.hlsl" // needed to sample scene normals
+            #include "Packages/com.unity.render-pipelines.high-definition/ShaderLibrary/DeclareOpaqueTexture.hlsl" // needed to sample scene color/luminance
 
             float _OutlineThickness;
             float4 _OutlineColor;
-
+            
             #pragma vertex Vert // vertex shader is provided by the Blit.hlsl include
             #pragma fragment frag
 
