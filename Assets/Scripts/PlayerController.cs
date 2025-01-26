@@ -38,12 +38,7 @@ public class PlayerController : MonoBehaviour {
 	private void FixedUpdate() {
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
 
-		if (Physics.CheckSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius, groundMask)) {
-			isGrounded = true;
-			Debug.Log("Grounded");
-		} else {
-			isGrounded = false;
-		}
+		isGrounded = Physics.CheckSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius, groundMask);
 	}
 
 	private void Looking(InputAction.CallbackContext context) {
@@ -60,9 +55,9 @@ public class PlayerController : MonoBehaviour {
 	private void Moving(Vector2 input) {
 		transform.rotation = Quaternion.Euler(0f, playerCamera.transform.eulerAngles.y, 0f);
 
-		Vector3 gravity = isGrounded ? Vector3.zero : Vector3.up * Consts.Physics.GRAVITY;
-		Vector3 movement = transform.right * input.x + transform.forward * input.y + gravity;
-		Vector3 finalMovement = movement.normalized * moveSpeed * Time.fixedDeltaTime;
+		Vector3 movement = (transform.right * input.x + transform.forward * input.y) * moveSpeed;
+		movement.y += isGrounded ? 0 : Consts.Physics.GRAVITY;
+		Vector3 finalMovement = movement * Time.fixedDeltaTime;
 
 		characterController.Move(finalMovement);
 	}
