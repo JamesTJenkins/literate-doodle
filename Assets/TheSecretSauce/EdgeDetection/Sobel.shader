@@ -13,6 +13,8 @@ Shader "Hidden/Shader/Sobel"
         _NormalBias("Normal Bias", Float) = 1
         //_LuminanceMultiplier("luminance Multiplier", Float) = 1
         //_LuminanceBias("luminance Bias", Float) = 1
+        _MaxRange("Max Range", Float) = 100
+        _DistanceFalloffPower("Distance Falloff Power", Float) = 3
     }
 
 
@@ -59,8 +61,10 @@ Shader "Hidden/Shader/Sobel"
     float _DepthBias;
     float _NormalMultiplier;
     float _NormalBias;
-    //float _LuminanceMultiplier;
-    //float _LuminanceBias;
+    float _LuminanceMultiplier;
+    float _LuminanceBias;
+    float _MaxRange;
+    float _DistanceFalloffPower;
     TEXTURE2D_X(_MainTex);
 
     // Original sobel
@@ -162,6 +166,10 @@ Shader "Hidden/Shader/Sobel"
         return SobelScharr(abs(topLeft - center), abs(top - center), abs(topRight - center), abs(left - center), abs(right - center), abs(botLeft - center), abs(bot - center), abs(botRight - center));
     }
 
+    float LinearEyeDepth(float depth) {
+        return 1.0 / (_ZBufferParams.x * depth + _ZBufferParams.y);
+    }
+
     float4 CustomPostProcess(Varyings input) : SV_Target
     {
         UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
@@ -180,12 +188,12 @@ Shader "Hidden/Shader/Sobel"
         sobelNormal = pow(abs(saturate(sobelNormal)) * _NormalMultiplier, _NormalBias);
 
         // Sobel luminance sampling
-        //float sobelLuminance = SobelSampleLuminance(input.texcoord.xy, offsetU, offsetV);
-        //sobelLuminance = pow(abs(saturate(sobelLuminance)) * _LuminanceMultiplier, _LuminanceBias);
+        float sobelLuminance = SobelSampleLuminance(input.texcoord.xy, offsetU, offsetV);
+        sobelLuminance = pow(abs(saturate(sobelLuminance)) * _LuminanceMultiplier, _LuminanceBias);
 
         // Dictate Intensity combining all 3
-        //float outlineIntensity = max(sobelDepth, max(sobelNormal, sobelLuminance));
-        float outlineIntensity = max(sobelDepth, sobelNormal);
+        float outlineIntensity = max(sobelDepth, max(sobelNormal, sobelLuminance));
+        //float outlineIntensity = max(sobelDepth, sobelNormal);
 
         // Sobel depth test
         //return float4(sobelDepth, sobelDepth, sobelDepth, 1);
@@ -196,8 +204,12 @@ Shader "Hidden/Shader/Sobel"
         // Sobel luminance test
         //return float4(sobelLuminance, sobelLuminance, sobelLuminance, 1);
 
+        // Calculate distance falloff
+        float depth = _ProjectionParams.z * LinearEyeDepth(SampleCameraDepth(input.texcoord));
+        float distanceFalloff = saturate(pow(_MaxRange / depth, _DistanceFalloffPower));
+
         // Apply sobel effect
-        float3 color = lerp(sourceColor, _OutlineColor, outlineIntensity * _OutlineIntensity);
+        float3 color = lerp(sourceColor.rgb, _OutlineColor.rgb, (outlineIntensity * _OutlineIntensity) * distanceFalloff);
         return float4(color, 1);
     }
 

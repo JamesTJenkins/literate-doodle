@@ -27,11 +27,17 @@ public sealed class Sobel : CustomPostProcessVolumeComponent, IPostProcessCompon
 	[Tooltip("Bias (i.e. power) applied to the scaled normal value.")]
 	public FloatParameter normalBias = new FloatParameter(1f);
 
-	//[Tooltip("Linearly scales the luminance calculation.")]
-	//public FloatParameter luminanceMultiplier = new FloatParameter(1f);
+	[Tooltip("Linearly scales the luminance calculation.")]
+	public FloatParameter luminanceMultiplier = new FloatParameter(1f);
 
-	//[Tooltip("Bias (i.e. power) applied to the scaled luminance value.")]
-	//public FloatParameter luminanceBias = new FloatParameter(1f);
+	[Tooltip("Bias (i.e. power) applied to the scaled luminance value.")]
+	public FloatParameter luminanceBias = new FloatParameter(1f);
+
+	[Tooltip("Max Range for the edge detection to be applied.")]
+	public FloatParameter maxRange = new FloatParameter(100f);
+
+	[Tooltip("Distance falloff power to make the falloff towards Max Range sharper or more subtle.")]
+	public FloatParameter distanceFalloffPower = new FloatParameter(3f);
 
 	Material m_Material;
 
@@ -63,8 +69,10 @@ public sealed class Sobel : CustomPostProcessVolumeComponent, IPostProcessCompon
         m_Material.SetFloat("_DepthBias", depthBias.value);
 		m_Material.SetFloat("_NormalMultiplier", normalMultiplier.value);
 		m_Material.SetFloat("_NormalBias", normalBias.value);
-		//m_Material.SetFloat("_LuminanceMultiplier", normalMultiplier.value);
-		//m_Material.SetFloat("_LuminanceBias", normalBias.value);
+		m_Material.SetFloat("_LuminanceMultiplier", normalMultiplier.value);
+		m_Material.SetFloat("_LuminanceBias", normalBias.value);
+		m_Material.SetFloat("_MaxRange", maxRange.value);
+		m_Material.SetFloat("_DistanceFalloffPower", distanceFalloffPower.value);
 		HDUtils.DrawFullScreen(cmd, m_Material, destination, shaderPassId: 0);
     }
 
