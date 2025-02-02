@@ -2,16 +2,21 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour {
+public class PauseMenu : MonoBehaviour {
+	[SerializeField] private GameObject pauseMenu;
 	[SerializeField] private GameObject menu;
 	[SerializeField] private GameObject settings;
 
 	private void Start() {
-		Cursor.lockState = CursorLockMode.None;
+		PlayerEvents.togglePauseMenu += TogglePauseMenu;
 	}
 
-	public void Play() {
-		LoadScene(Consts.Menu.MAIN_LEVEL_NAME);
+	private void OnDestroy() {
+		PlayerEvents.togglePauseMenu -= TogglePauseMenu;
+	}
+
+	public void MainMenu() {
+		LoadScene(Consts.Menu.MAINMENU_LEVEL_NAME);
 	}
 
 	public void Settings(bool open) {
@@ -19,8 +24,16 @@ public class MainMenu : MonoBehaviour {
 		menu.SetActive(!open);
 	}
 
-	public void Quit() {
-		Application.Quit();
+	public void TogglePauseMenu() {
+		pauseMenu.SetActive(!pauseMenu.activeSelf);
+		Cursor.lockState = pauseMenu.activeSelf ? CursorLockMode.None : CursorLockMode.Confined;
+		Cursor.visible = pauseMenu.activeSelf;
+		PlayerEvents.OnTogglePlayerInput(!pauseMenu.activeSelf);
+
+		if (settings.activeSelf) {
+			Settings(false);
+			PlayerEvents.OnSaveSettings();
+		}
 	}
 
 	private async void LoadScene(string levelName) {

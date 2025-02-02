@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour {
 	[Header("References")]
@@ -25,15 +27,24 @@ public class PlayerController : MonoBehaviour {
 
 	private void Start() {
 		userInput = new InputSystem_Actions();
+		userInput.UI.Pause.performed += OnPause;
 		userInput.Enable();
 
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+
+		UpdateSensitivity();
+		PlayerEvents.updateSensitivity += UpdateSensitivity;
+		PlayerEvents.togglePlayerInput += TogglePlayerInput;
 	}
 
 	private void OnDestroy() {
 		userInput.Disable();
+		userInput.UI.Pause.performed -= OnPause;
 		userInput.Dispose();
+
+		PlayerEvents.updateSensitivity -= UpdateSensitivity;
+		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
 	}
 
 	private void Update() {
@@ -43,6 +54,21 @@ public class PlayerController : MonoBehaviour {
 
 	private void FixedUpdate() {
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
+	}
+
+	private void OnPause(InputAction.CallbackContext context) {
+		PlayerEvents.OnTogglePauseMenu();
+	}
+
+	private void TogglePlayerInput(bool enable) {
+		if (enable)
+			userInput.Player.Enable();
+		else
+			userInput.Player.Disable();
+	}
+
+	private void UpdateSensitivity() {
+		sensitivity = Save.GetData().sensitivity;
 	}
 
 	private void Looking(Vector2 axisInput) {
