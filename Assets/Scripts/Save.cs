@@ -55,6 +55,7 @@ public class GameData : ICloneable {
 
 	public void UpdateSensitivity(float _sensitivity) {
 		sensitivity = _sensitivity;
+		PlayerEvents.OnUpdateSensitivity();
 	}
 
 	public object Clone() {

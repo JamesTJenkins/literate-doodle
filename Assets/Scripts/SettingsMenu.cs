@@ -72,6 +72,13 @@ public class SettingsMenu : MonoBehaviour {
 		GameData pd = Save.GetData();
 		InitalizeAudio(pd.masterVol, pd.musicVol, pd.sfxVol);
 		sensitivitySlider.value = pd.sensitivity;
+
+		// Events
+		PlayerEvents.saveSettings += SaveGameSettings;
+	}
+
+	private void OnDestroy() {
+		PlayerEvents.saveSettings -= SaveGameSettings;
 	}
 
 	// Save stuff
