@@ -58,7 +58,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
+  m_RayTracingMode: 1
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
@@ -161,6 +161,10 @@ PrefabInstance:
     - target: {fileID: 7411458026899642408, guid: 3b2d585b718694f4ba03cdbe902f6722, type: 3}
       propertyPath: m_Name
       value: 2x2_5TunnelStairsPart
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785894987308417719, guid: 3b2d585b718694f4ba03cdbe902f6722, type: 3}
+      propertyPath: m_RayTracingMode
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
