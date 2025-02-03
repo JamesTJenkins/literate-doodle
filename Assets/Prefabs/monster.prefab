@@ -5013,13 +5013,60 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -4679905682791781163, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1676965942445190885}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 921202350658110953}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7753459589715899615}
   m_SourcePrefab: {fileID: 100100000, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
 --- !u!4 &1271066867247331860 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4679905682791781163, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
   m_PrefabInstance: {fileID: 3363658989099718337}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2481333683175009168 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 5d842384df672ba48952b69a1f2d45ed, type: 3}
+  m_PrefabInstance: {fileID: 3363658989099718337}
+  m_PrefabAsset: {fileID: 0}
+--- !u!195 &921202350658110953
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481333683175009168}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &7753459589715899615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481333683175009168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d973b2684570314db38d216e37ad820, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 921202350658110953}
+  targetGoal: {fileID: 0}
 --- !u!1001 &3397088919813038270
 PrefabInstance:
   m_ObjectHideFlags: 0
