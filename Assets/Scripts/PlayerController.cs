@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour {
 	public float staminaRegenRate; //5f
 
 	public bool sprintingEnabled;
+	public float sprintEnableValue; //50f
 
 	private bool isGrounded;
 	public LayerMask groundMask;
@@ -82,10 +83,7 @@ public class PlayerController : MonoBehaviour {
 
 	private void Sprinting(bool buttonInput) {
 		stamina = Mathf.Clamp(stamina, 0, 100);
-		if (stamina <= 0) {
-			sprintingEnabled = false;
-			StartCoroutine(StaminaRegen());
-		}
+		CheckSprintRecharge();
 
 		if (buttonInput && sprintingEnabled) {
 			stamina -= staminaDrainRate * Time.fixedDeltaTime;
@@ -96,12 +94,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	IEnumerator StaminaRegen() {
-		if (stamina >= 100) {
+	private void CheckSprintRecharge() {
+		if (stamina <= 0) {
+			sprintingEnabled = false;
+		}
+
+		if (stamina >= sprintEnableValue) {
 			sprintingEnabled = true;
-			yield return null;
 		}
 	}
+
 
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
