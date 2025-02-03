@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class SettingsMenu : MonoBehaviour {
 	[Header("Game")]
 	[SerializeField] private Slider sensitivitySlider;
+	[SerializeField] private TMP_InputField sensitivityInput;
 	[Header("Video")]
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
 	[SerializeField] private TMP_Dropdown windowModeDropdown;
@@ -19,6 +20,7 @@ public class SettingsMenu : MonoBehaviour {
 
 	private Resolution[] resolutions;
 	private bool unsavedChanges = false;
+	private float prevValue;
 
 	private void Start()
 	{
@@ -72,6 +74,8 @@ public class SettingsMenu : MonoBehaviour {
 		GameData pd = Save.GetData();
 		InitalizeAudio(pd.masterVol, pd.musicVol, pd.sfxVol);
 		sensitivitySlider.value = pd.sensitivity;
+		sensitivityInput.text = pd.sensitivity.ToString();
+		prevValue = pd.sensitivity;
 
 		// Events
 		PlayerEvents.saveSettings += SaveGameSettings;
@@ -102,8 +106,40 @@ public class SettingsMenu : MonoBehaviour {
 	}
 
 	// Game settings
+	public void OnSensitivityEndEdit(string changed) {
+		if (!UpdateSensitivityField(changed)) {
+			sensitivityInput.text = prevValue.ToString();
+			sensitivitySlider.value = prevValue;
+		} 
+	}
+
+	public void OnSensitivityFieldChanged(string changed) {
+		UpdateSensitivityField(changed);
+	}
+	
 	public void OnSensitivitySliderChanged() {
+		// Stops making the sensitivity box get overflown
+		string value = sensitivitySlider.value.ToString();
+		if (value.Length > sensitivityInput.characterLimit) {
+			value = value.Substring(0, sensitivityInput.characterLimit);
+			sensitivitySlider.value = float.Parse(value);
+		}
+
+		sensitivityInput.text = sensitivitySlider.value.ToString();
+		prevValue = sensitivitySlider.value;
 		unsavedChanges = true;
+	}
+
+	private bool UpdateSensitivityField(string changed) {
+		if (float.TryParse(changed, out float result)) {
+			sensitivitySlider.value = result;
+			prevValue = result;
+			unsavedChanges = true;
+
+			return true;
+		}
+
+		return false;
 	}
 
 	// Video settings 

@@ -806,6 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivitySlider: {fileID: 9141120828781005802}
+  sensitivityInput: {fileID: 2330230954210757853}
   resolutionDropdown: {fileID: 1950216027677119100}
   windowModeDropdown: {fileID: 6837226315852315320}
   mixer: {fileID: 24100000, guid: ead2b68696f9e8d418e667c2696c8be9, type: 2}
@@ -1228,6 +1229,62 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8065288236444235539}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSensitivityEndEdit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8065288236444235539}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSensitivityFieldChanged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingsMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingsMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4928000305114130992, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.2
@@ -1297,6 +1354,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2330230954210757853 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4907374671195953389, guid: ba7b542d85bd458428d7efc17afacb11, type: 3}
+  m_PrefabInstance: {fileID: 7227393358983353392}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4864777719176093105 stripped
