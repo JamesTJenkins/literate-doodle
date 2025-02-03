@@ -335,6 +335,11 @@ MonoBehaviour:
   invertLook: 0
   movementBaseSpeed: 5
   sprintingAddedSpeed: 2.5
+  stamina: 100
+  staminaDrainRate: 10
+  staminaRegenRate: 5
+  sprintingEnabled: 1
+  sprintEnableValue: 50
   groundMask:
     serializedVersion: 2
     m_Bits: 55
