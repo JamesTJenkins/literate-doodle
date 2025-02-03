@@ -49,11 +49,11 @@ public class PlayerController : MonoBehaviour {
 
 	private void Update() {
 		Looking(userInput.Player.Look.ReadValue<Vector2>());
-		Sprinting(userInput.Player.Sprint.IsPressed());
 	}
 
 	private void FixedUpdate() {
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
+		Sprinting(userInput.Player.Sprint.IsPressed());
 	}
 
 	private void Looking(Vector2 axisInput) {

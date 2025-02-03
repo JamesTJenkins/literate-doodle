@@ -339,6 +339,7 @@ MonoBehaviour:
   staminaDrainRate: 10
   staminaRegenRate: 5
   sprintingEnabled: 1
+  sprintEnableValue: 50
   groundMask:
     serializedVersion: 2
     m_Bits: 55
