@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour {
 	public float checkSphereRadius;
 	public float groundOffset;
 
-	private void PlayerInit() {
+	private void Start() {
 		userInput = new InputSystem_Actions();
 		userInput.Enable();
 
@@ -40,10 +40,6 @@ public class PlayerController : MonoBehaviour {
 
 		stamina = 100f;
 		sprintingEnabled = true;
-	}
-
-	private void Start() {
-		PlayerInit();
 	}
 
 	private void OnDestroy() {
