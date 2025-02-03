@@ -73,7 +73,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 75eaeb57ce4dd4046894015359f50d6b, type: 2}
   m_TargetDisplay: 0
@@ -329,6 +329,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 8144015376148120979}
   playerCamera: {fileID: 7235268080690332582}
+  interactDistance: 5
+  interactLayers:
+    serializedVersion: 2
+    m_Bits: 128
   sensitivity: 1
   minLookAngle: -89
   maxLookAngle: 89
