@@ -4,27 +4,34 @@ using UnityEngine.AI;
 public class MonsterAI : MonoBehaviour {
 
 	public NavMeshAgent agent;
-	public Transform targetGoal;
-
+	public GameObject player;
 	public Vector3[] travelPoints;
 
-	[Header("Debug")]
 	public float debugSphereRadius;
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
+
 	void Start() {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 	}
 
-	// Update is called once per frame
-	void Update() {
+	private void FixedUpdate() {
+
+	if (Physics.Raycast(transform.position, player.transform.position - transform.position)) {
+		Debug.Log("Player sighted");
+		}
+
 		if (agent.remainingDistance < 1f) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
+
+		transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+	}
+
+	private void OnDrawGizmos() {
+		Gizmos.color = Color.magenta;
+		Gizmos.DrawRay(transform.position, player.transform.position - transform.position);
 	}
 
 	/*PSEUDO
-	Get list of points on navmesh
-	Pick random point on map
 	If player sighted target player
 	If player within distance, attack player
 	If player not sighted go to last known point

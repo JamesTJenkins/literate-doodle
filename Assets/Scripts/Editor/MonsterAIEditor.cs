@@ -5,17 +5,17 @@ using UnityEngine;
 public class MonsterAIEditor : Editor {
 	private SerializedProperty travelPoints;
 	private SerializedProperty agent;
-	private SerializedProperty targetGoal;
+	private SerializedProperty player;
 	private SerializedProperty debugSphereRadius;
 
 	private int selectedPointIndex = -1;
-	private bool showTravelPoints = true;
+	private bool showTravelPoints = false;
 	private bool displayTravelPoints = true;
 
 	private void OnEnable() {
 		travelPoints = serializedObject.FindProperty("travelPoints");
 		agent = serializedObject.FindProperty("agent");
-		targetGoal = serializedObject.FindProperty("targetGoal");
+		player = serializedObject.FindProperty("player");
 		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
 
 	}
@@ -24,13 +24,14 @@ public class MonsterAIEditor : Editor {
 		serializedObject.Update();
 
 		EditorGUILayout.PropertyField(agent);
-		EditorGUILayout.PropertyField(targetGoal);
+		EditorGUILayout.PropertyField(player);
 
 
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
 		if (showTravelPoints) {
 			EditorGUI.indentLevel++;
+			displayTravelPoints = EditorGUILayout.Toggle("Display Travel Points", displayTravelPoints);
 			for (int i = 0; i < travelPoints.arraySize; i++) {
 				EditorGUILayout.BeginHorizontal();
 				GUI.color = i == selectedPointIndex ? Color.yellow : Color.white;
@@ -60,13 +61,8 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.LabelField("Editor", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(debugSphereRadius);
 
-		bool newDisplayTravelPoints = EditorGUILayout.Toggle("Display Travel Points", displayTravelPoints);
-		if (newDisplayTravelPoints != displayTravelPoints) {
-			displayTravelPoints = newDisplayTravelPoints;
-			SceneView.RepaintAll();
-		}
-
 		serializedObject.ApplyModifiedProperties();
+		SceneView.RepaintAll();
 	}
 
 	private void OnSceneGUI() {
