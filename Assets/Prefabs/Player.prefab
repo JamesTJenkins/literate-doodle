@@ -342,6 +342,6 @@ MonoBehaviour:
   sprintEnableValue: 50
   groundMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 55
   checkSphereRadius: 0.5
   groundOffset: 0.6
