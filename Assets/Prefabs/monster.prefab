@@ -5066,7 +5066,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 921202350658110953}
-  targetGoal: {fileID: 0}
+  player: {fileID: 0}
+  travelPoints: []
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  lastKnownPlayerPosition: {x: 0, y: 0, z: 0}
+  rayCastOrigin: {fileID: 0}
+  rayCastTarget: {x: 0, y: 0, z: 0}
+  rayCastTargetOffset: {x: 0, y: 0.75, z: 0}
+  debugSphereRadius: 1
 --- !u!1001 &3397088919813038270
 PrefabInstance:
   m_ObjectHideFlags: 0

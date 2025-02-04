@@ -7,6 +7,9 @@ public class MonsterAIEditor : Editor {
 	private SerializedProperty agent;
 	private SerializedProperty player;
 	private SerializedProperty debugSphereRadius;
+	private SerializedProperty playerLayerMask;
+	private SerializedProperty rayCastOrigin;
+	private SerializedProperty rayCastTargetOffset;
 
 	private int selectedPointIndex = -1;
 	private bool showTravelPoints = false;
@@ -17,7 +20,9 @@ public class MonsterAIEditor : Editor {
 		agent = serializedObject.FindProperty("agent");
 		player = serializedObject.FindProperty("player");
 		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
-
+		playerLayerMask = serializedObject.FindProperty("playerLayerMask");
+		rayCastOrigin = serializedObject.FindProperty("rayCastOrigin");
+		rayCastTargetOffset = serializedObject.FindProperty("rayCastTargetOffset");
 	}
 
 	public override void OnInspectorGUI() {
@@ -25,8 +30,9 @@ public class MonsterAIEditor : Editor {
 
 		EditorGUILayout.PropertyField(agent);
 		EditorGUILayout.PropertyField(player);
-
-
+		EditorGUILayout.PropertyField(playerLayerMask);
+		EditorGUILayout.PropertyField(rayCastOrigin);
+		EditorGUILayout.PropertyField(rayCastTargetOffset);
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
 		if (showTravelPoints) {

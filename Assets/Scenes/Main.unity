@@ -7681,12 +7681,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2120557349}
+    - target: {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
       propertyPath: targetGoal
       value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
-      propertyPath: debugSphereRadius
-      value: 0.83
       objectReference: {fileID: 0}
     - target: {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
       propertyPath: travelPoints.Array.size
@@ -12611,6 +12611,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3128087020705124583, guid: 85e2ae4df73ce0f4a9acf63c1e62e0d6, type: 3}
   m_PrefabInstance: {fileID: 2104633779}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2120557349 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7488915959713064032, guid: 5fa80e15f5e6b7b4fa93c01943a4a976, type: 3}
+  m_PrefabInstance: {fileID: 2269144153507924017}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2130407798
 PrefabInstance:

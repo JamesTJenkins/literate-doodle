@@ -7,6 +7,14 @@ public class MonsterAI : MonoBehaviour {
 	public GameObject player;
 	public Vector3[] travelPoints;
 
+	public LayerMask playerLayerMask;
+	public Vector3 lastKnownPlayerPosition;
+	public GameObject rayCastOrigin;
+	public Vector3 rayCastTarget;
+	public Vector3 rayCastTargetOffset;
+
+	private RaycastHit hitInfo;
+
 	public float debugSphereRadius;
 
 	void Start() {
@@ -15,26 +23,32 @@ public class MonsterAI : MonoBehaviour {
 
 	private void FixedUpdate() {
 
-	if (Physics.Raycast(transform.position, player.transform.position - transform.position)) {
-		Debug.Log("Player sighted");
-		}
+		rayCastTarget = player.transform.position + rayCastTargetOffset;
 
+	if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
+		if (hitInfo.collider.CompareTag("Player")) {
+				lastKnownPlayerPosition = rayCastTarget;
+				agent.destination = lastKnownPlayerPosition;
+			}
+		}
 		if (agent.remainingDistance < 1f) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
-
-		transform.rotation = Quaternion.LookRotation(agent.velocity.normalized);
+		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 	}
 
 	private void OnDrawGizmos() {
 		Gizmos.color = Color.magenta;
-		Gizmos.DrawRay(transform.position, player.transform.position - transform.position);
+		Gizmos.DrawRay(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position);
+
+		Gizmos.color = Color.green;
+		Gizmos.DrawSphere(lastKnownPlayerPosition, debugSphereRadius);
+
+		Gizmos.color = Color.blue;
+		Gizmos.DrawSphere(agent.destination, debugSphereRadius);
 	}
 
 	/*PSEUDO
-	If player sighted target player
 	If player within distance, attack player
-	If player not sighted go to last known point
-	If player not around last known point go to random point
 	 */
 }
