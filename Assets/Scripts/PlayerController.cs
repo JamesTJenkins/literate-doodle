@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,18 +8,18 @@ public class PlayerController : MonoBehaviour {
 	public Camera playerCamera;
 
 	[Header("Looking")]
-	public float sensitivity; //1f
+	private float sensitivity;
+	private bool invertLook;
 
 	public float minLookAngle, maxLookAngle; //-89f, 89f
 	private float xRotation;
-	public bool invertLook;
 
 	[Header("Movement")]
 	public float movementBaseSpeed; //5f
 	public float sprintingAddedSpeed; //2.5f
 	private bool isSprinting;
 
-	public float stamina; //100f
+	private float stamina = 100; 
 	public float staminaDrainRate; //10f
 	public float staminaRegenRate; //5f
 
@@ -125,11 +123,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-
+	#if UNITY_EDITOR
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
 	}
-
+	#endif
 
 }
