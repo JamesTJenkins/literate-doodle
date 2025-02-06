@@ -22,7 +22,9 @@ public class MonsterAI : MonoBehaviour {
 
 	public Animator monsterAnimator;
 
-	[SerializeField] private float debugSphereRadius;
+#if UNITY_EDITOR
+	public float debugSphereRadius;
+#endif
 
 	void Start() {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
@@ -59,6 +61,7 @@ public class MonsterAI : MonoBehaviour {
 			agent.speed = monsterWalkingSpeed;
 		}
 	}
+
 #if UNITY_EDITOR
 	private void OnDrawGizmos() {
 		Gizmos.color = Color.magenta;
@@ -70,7 +73,6 @@ public class MonsterAI : MonoBehaviour {
 		Gizmos.color = Color.blue;
 		Gizmos.DrawSphere(agent.destination, debugSphereRadius);
 	}
-
 #endif
 
 	/*PSEUDO
