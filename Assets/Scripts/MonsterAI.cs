@@ -22,7 +22,7 @@ public class MonsterAI : MonoBehaviour {
 
 	public Animator monsterAnimator;
 
-	public float debugSphereRadius;
+	[SerializeField] private float debugSphereRadius;
 
 	void Start() {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
