@@ -12,8 +12,13 @@ public class MonsterAI : MonoBehaviour {
 	public GameObject rayCastOrigin;
 	public Vector3 rayCastTarget;
 	public Vector3 rayCastTargetOffset;
-
 	private RaycastHit hitInfo;
+
+	public float monsterWalkingSpeed;
+	public float monsterRunningSpeed;
+	public bool isRunning;
+
+	public Animator monsterAnimator;
 
 	public float debugSphereRadius;
 
@@ -22,19 +27,31 @@ public class MonsterAI : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-
 		rayCastTarget = player.transform.position + rayCastTargetOffset;
 
-	if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
-		if (hitInfo.collider.CompareTag("Player")) {
+		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
+
+		if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
+			if (hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 				lastKnownPlayerPosition = rayCastTarget;
 				agent.destination = lastKnownPlayerPosition;
+				isRunning = true;
+			} else {
+				isRunning = false;
 			}
+				
 		}
-		if (agent.remainingDistance < 1f) {
+		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
+
+		if (isRunning) {
+			agent.speed = monsterRunningSpeed;
+		} else {
+			agent.speed = monsterWalkingSpeed;
+
+		}
 	}
 
 	private void OnDrawGizmos() {

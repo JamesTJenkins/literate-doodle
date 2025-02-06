@@ -10,6 +10,9 @@ public class MonsterAIEditor : Editor {
 	private SerializedProperty playerLayerMask;
 	private SerializedProperty rayCastOrigin;
 	private SerializedProperty rayCastTargetOffset;
+	private SerializedProperty monsterWalkingSpeed;
+	private SerializedProperty monsterRunningSpeed;
+	private SerializedProperty monsterAnimator;
 
 	private int selectedPointIndex = -1;
 	private bool showTravelPoints = false;
@@ -23,21 +26,35 @@ public class MonsterAIEditor : Editor {
 		playerLayerMask = serializedObject.FindProperty("playerLayerMask");
 		rayCastOrigin = serializedObject.FindProperty("rayCastOrigin");
 		rayCastTargetOffset = serializedObject.FindProperty("rayCastTargetOffset");
+		monsterWalkingSpeed = serializedObject.FindProperty("monsterWalkingSpeed");
+		monsterRunningSpeed = serializedObject.FindProperty("monsterRunningSpeed");
+		monsterAnimator = serializedObject.FindProperty("monsterAnimator");
 	}
 
 	public override void OnInspectorGUI() {
 		serializedObject.Update();
 
+		EditorGUILayout.LabelField("RayCasting Options", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(agent);
 		EditorGUILayout.PropertyField(player);
 		EditorGUILayout.PropertyField(playerLayerMask);
 		EditorGUILayout.PropertyField(rayCastOrigin);
 		EditorGUILayout.PropertyField(rayCastTargetOffset);
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Monster Speed", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(monsterWalkingSpeed);
+		EditorGUILayout.PropertyField(monsterRunningSpeed);
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Monster Animator", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(monsterAnimator);
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
 		if (showTravelPoints) {
 			EditorGUI.indentLevel++;
-			displayTravelPoints = EditorGUILayout.Toggle("Display Travel Points", displayTravelPoints);
+			displayTravelPoints = EditorGUILayout.Toggle(
+				"Display Travel Points",
+				displayTravelPoints
+			);
 			for (int i = 0; i < travelPoints.arraySize; i++) {
 				EditorGUILayout.BeginHorizontal();
 				GUI.color = i == selectedPointIndex ? Color.yellow : Color.white;
@@ -50,7 +67,10 @@ public class MonsterAIEditor : Editor {
 				}
 				GUI.color = Color.white;
 				if (travelPoints.arraySize > 0) {
-					EditorGUILayout.PropertyField(travelPoints.GetArrayElementAtIndex(i), GUIContent.none);
+					EditorGUILayout.PropertyField(
+						travelPoints.GetArrayElementAtIndex(i),
+						GUIContent.none
+					);
 				}
 				EditorGUILayout.EndHorizontal();
 			}
@@ -77,7 +97,9 @@ public class MonsterAIEditor : Editor {
 			foreach (Vector3 point in monsterAI.travelPoints) {
 				Handles.color = Color.red;
 				Handles.SphereHandleCap(0, point, Quaternion.identity, monsterAI.debugSphereRadius, EventType.Repaint);
-				if (Handles.Button(point, Quaternion.identity, monsterAI.debugSphereRadius, monsterAI.debugSphereRadius, Handles.SphereHandleCap)) {
+				if (
+					Handles.Button(point, Quaternion.identity, monsterAI.debugSphereRadius, monsterAI.debugSphereRadius, Handles.SphereHandleCap)
+				) {
 					selectedPointIndex = System.Array.IndexOf(monsterAI.travelPoints, point);
 					Repaint();
 				}
