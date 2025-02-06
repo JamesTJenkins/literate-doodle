@@ -42,7 +42,7 @@ public class MonsterAI : MonoBehaviour {
 			} else {
 				isRunning = false;
 			}
-				
+
 		}
 		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
@@ -59,7 +59,7 @@ public class MonsterAI : MonoBehaviour {
 			agent.speed = monsterWalkingSpeed;
 		}
 	}
-
+#if UNITY_EDITOR
 	private void OnDrawGizmos() {
 		Gizmos.color = Color.magenta;
 		Gizmos.DrawRay(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position);
@@ -70,6 +70,8 @@ public class MonsterAI : MonoBehaviour {
 		Gizmos.color = Color.blue;
 		Gizmos.DrawSphere(agent.destination, debugSphereRadius);
 	}
+
+#endif
 
 	/*PSEUDO
 	If player within distance, attack player

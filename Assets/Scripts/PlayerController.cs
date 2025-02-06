@@ -123,10 +123,11 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	#if UNITY_EDITOR
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
 	}
-
+	#endif
 
 }
