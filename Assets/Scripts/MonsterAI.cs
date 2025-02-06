@@ -18,6 +18,8 @@ public class MonsterAI : MonoBehaviour {
 	public float monsterRunningSpeed;
 	public bool isRunning;
 
+	public float monsterAttackDistance;
+
 	public Animator monsterAnimator;
 
 	public float debugSphereRadius;
@@ -30,6 +32,7 @@ public class MonsterAI : MonoBehaviour {
 		rayCastTarget = player.transform.position + rayCastTargetOffset;
 
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
+		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 
 		if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
 			if (hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
@@ -44,13 +47,16 @@ public class MonsterAI : MonoBehaviour {
 		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
-		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
+
+		if (agent.remainingDistance <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+			isRunning = false;
+			// Put Attacking Anim here :)
+		}
 
 		if (isRunning) {
 			agent.speed = monsterRunningSpeed;
 		} else {
 			agent.speed = monsterWalkingSpeed;
-
 		}
 	}
 
