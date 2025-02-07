@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] private float interactDistance = 5f;
 	[SerializeField] private LayerMask interactLayers;
 
+	private bool hasDoorKey;
+
 	[Header("Looking")]
 	public float sensitivity;
 
@@ -92,26 +94,38 @@ public class PlayerController : MonoBehaviour {
 		if (prevHit == null)
 			return;
 
-		Interactable interactObject = prevHit.GetComponent<Interactable>();
-		switch (interactObject.interactType) {
+		GameObject interactObject = prevHit;
+		Interactable interactable = interactObject.GetComponent<Interactable>();
+		switch (interactable.interactType) {
 		case InteractType.Door:
-			Debug.Log(interactObject.itemName);
+			if (hasDoorKey) {
+				interactObject.transform.parent.gameObject.SetActive(false);
+				Debug.Log($"Opened {interactable.itemName}");
+			} else {
+				Debug.Log("Door is locked");
+			}
 			break;
 
 		case InteractType.Item:
-			Debug.Log(interactObject.itemName);
+			Debug.Log(interactable.itemName);
+			break;
+
+		case InteractType.Key:
+			interactObject.SetActive(false);
+			hasDoorKey = true;
+			Debug.Log($"Picked up {interactable.itemName}");
 			break;
 
 		case InteractType.Switch:
-			Debug.Log(interactObject.itemName);
+			Debug.Log(interactable.itemName);
 			break;
 
 		case InteractType.Coffin:
-			Debug.Log(interactObject.itemName);
+			Debug.Log(interactable.itemName);
 			break;
 
 		default:
-			Debug.Log(interactObject.itemName);
+			Debug.Log(interactable.itemName);
 			Debug.LogWarning("Interactable type not found");
 			break;
 		}
@@ -175,5 +189,7 @@ public class PlayerController : MonoBehaviour {
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
+
+		Gizmos.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * interactDistance);
 	}
 }
