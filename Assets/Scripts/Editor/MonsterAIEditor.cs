@@ -14,6 +14,7 @@ public class MonsterAIEditor : Editor {
 	private SerializedProperty monsterRunningSpeed;
 	private SerializedProperty monsterAnimator;
 	private SerializedProperty monsterAttackDistance;
+	private SerializedProperty killCamA;
 
 	private int selectedPointIndex = -1;
 	private bool showTravelPoints = false;
@@ -31,6 +32,7 @@ public class MonsterAIEditor : Editor {
 		monsterRunningSpeed = serializedObject.FindProperty("monsterRunningSpeed");
 		monsterAnimator = serializedObject.FindProperty("monsterAnimator");
 		monsterAttackDistance = serializedObject.FindProperty("monsterAttackDistance");
+		killCamA = serializedObject.FindProperty("killCamA");
 	}
 
 	public override void OnInspectorGUI() {
@@ -52,6 +54,8 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Monster Attack", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(monsterAttackDistance);
+		EditorGUILayout.LabelField("Kill Cameras", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(killCamA);
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
 		if (showTravelPoints) {

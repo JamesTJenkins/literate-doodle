@@ -2,7 +2,10 @@ using System;
 
 public static class PlayerEvents {
 	public static Action<bool> togglePlayerInput;
+	public static Action<bool> toggleUIInput;
+	public static Action forceClosePauseMenu;
 	public static Action togglePauseMenu;
+	public static Action toggleDeathScreen;
 	public static Action updateSensitivity;
 	public static Action saveSettings;
 
@@ -10,8 +13,20 @@ public static class PlayerEvents {
 		togglePlayerInput?.Invoke(enable);
 	}
 
+	public static void OnToggleUIInput(bool enable) {
+		toggleUIInput?.Invoke(enable);
+	}
+
 	public static void OnTogglePauseMenu() {
 		togglePauseMenu?.Invoke();
+	}
+
+	public static void OnForceClosePauseMenu() {
+		forceClosePauseMenu?.Invoke();
+	}
+
+	public static void OnToggleDeathScreen() {
+		toggleDeathScreen?.Invoke();
 	}
 
 	public static void OnUpdateSensitivity() {

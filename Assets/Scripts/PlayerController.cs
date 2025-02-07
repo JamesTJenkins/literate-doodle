@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour {
 		UpdateSensitivity();
 		PlayerEvents.updateSensitivity += UpdateSensitivity;
 		PlayerEvents.togglePlayerInput += TogglePlayerInput;
+		PlayerEvents.togglePlayerInput += ToggleUIInput;
+		
 		stamina = 100f;
 		sprintingEnabled = true;
 	}
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour {
 
 		PlayerEvents.updateSensitivity -= UpdateSensitivity;
 		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
+		PlayerEvents.togglePlayerInput -= ToggleUIInput;
 	}
 
 	private void Update() {
@@ -73,6 +76,13 @@ public class PlayerController : MonoBehaviour {
 			userInput.Player.Enable();
 		else
 			userInput.Player.Disable();
+	}
+
+	private void ToggleUIInput(bool enable) {
+		if (enable)
+			userInput.UI.Enable();
+		else
+			userInput.UI.Disable();
 	}
 
 	private void UpdateSensitivity() {

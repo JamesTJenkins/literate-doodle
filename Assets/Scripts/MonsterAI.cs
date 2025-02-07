@@ -22,6 +22,10 @@ public class MonsterAI : MonoBehaviour {
 
 	public Animator monsterAnimator;
 
+	public Camera killCamA;
+
+	private bool inKillingAnim = false;
+
 #if UNITY_EDITOR
 	public float debugSphereRadius;
 #endif
@@ -44,21 +48,30 @@ public class MonsterAI : MonoBehaviour {
 			} else {
 				isRunning = false;
 			}
-
 		}
 		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
 
-		if (agent.remainingDistance <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
-			isRunning = false;
-			// Put Attacking Anim here :)
-		}
+		if (Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+			if (!inKillingAnim) {
+				inKillingAnim = true;
+				isRunning = false;
+				agent.isStopped = true;
 
-		if (isRunning) {
-			agent.speed = monsterRunningSpeed;
-		} else {
-			agent.speed = monsterWalkingSpeed;
+				PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
+				PlayerEvents.OnTogglePlayerInput(false);
+				PlayerEvents.OnToggleUIInput(false);
+				monsterAnimator.SetTrigger("Kill");
+				player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+				killCamA.gameObject.SetActive(true);
+			}
+
+			if (isRunning) {
+				agent.speed = monsterRunningSpeed;
+			} else {
+				agent.speed = monsterWalkingSpeed;
+			}
 		}
 	}
 
