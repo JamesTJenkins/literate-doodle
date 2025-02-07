@@ -95,8 +95,25 @@ public class PlayerController : MonoBehaviour {
 		if (prevHit == null)
 			return;
 
-		prevHit.SetActive(false);
-		// TODO: actually have effects to interactions
+		Interactable interactObject = prevHit.GetComponent<Interactable>();
+		switch (interactObject.interactType) {
+		case InteractType.Door:
+			Debug.Log(interactObject.itemName);
+			break;
+
+		case InteractType.Item:
+			Debug.Log(interactObject.itemName);
+			break;
+
+		case InteractType.Switch:
+			Debug.Log(interactObject.itemName);
+			break;
+
+		default:
+			Debug.Log(interactObject.itemName);
+			Debug.LogWarning("Interactable type not found");
+			break;
+		}
 	}
 
 	private void TogglePlayerInput(bool enable) {
