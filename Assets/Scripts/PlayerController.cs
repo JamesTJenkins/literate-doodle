@@ -109,6 +109,10 @@ public class PlayerController : MonoBehaviour {
 			Debug.Log(interactObject.itemName);
 			break;
 
+		case InteractType.Coffin:
+			Debug.Log(interactObject.itemName);
+			break;
+
 		default:
 			Debug.Log(interactObject.itemName);
 			Debug.LogWarning("Interactable type not found");
