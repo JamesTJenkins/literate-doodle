@@ -2,6 +2,7 @@ using UnityEngine;
 
 public enum InteractType {
 	Item,
+	Key,
 	Door,
 	Switch,
 	Coffin,
