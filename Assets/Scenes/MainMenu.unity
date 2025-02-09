@@ -255,6 +255,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 0.047746483
       objectReference: {fileID: 0}
+    - target: {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
+      propertyPath: monsterAnimator
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8222753647238117690, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
       propertyPath: m_Intensity
       value: 0.047746483
@@ -265,6 +269,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 9206637120059747152, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
+    - {fileID: 7753459589715899615, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
+    - {fileID: 650843904803231069, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
+    - {fileID: 921202350658110953, guid: 05751e2b2dd832e42a5d7de6ac0e0d1b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
