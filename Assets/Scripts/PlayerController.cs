@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 
 	private bool hasDoorKey;
 
+
 	[Header("Looking")]
 	public float sensitivity;
 	private bool invertLook;
@@ -196,13 +197,13 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
 
 		Gizmos.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * interactDistance);
 	}
-	#endif
+#endif
 
 }
