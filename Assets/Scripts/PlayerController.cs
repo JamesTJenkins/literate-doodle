@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 	private HashSet<string> items = new HashSet<string>();
 
 	[Header("Looking")]
-	public float sensitivity;
+	private float sensitivity;
 	private bool invertLook;
 
 	public float minLookAngle, maxLookAngle;
