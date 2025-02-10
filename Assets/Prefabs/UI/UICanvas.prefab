@@ -382,6 +382,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathScreen: {fileID: 3528402124981163202}
+  crosshair: {fileID: 1512459702776848130}
 --- !u!1001 &26422826026130721
 PrefabInstance:
   m_ObjectHideFlags: 0
