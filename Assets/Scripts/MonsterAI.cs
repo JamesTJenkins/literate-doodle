@@ -73,6 +73,7 @@ public class MonsterAI : MonoBehaviour {
 			isRunning = false;
 			agent.isStopped = true;
 
+			PlayerEvents.OnDisplayHint(string.Empty);
 			PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
 			PlayerEvents.OnTogglePlayerInput(false);
 			PlayerEvents.OnToggleUIInput(false);
