@@ -24,17 +24,31 @@ public class MonsterAI : MonoBehaviour {
 
 	public Camera killCamA;
 
-	private bool inKillingAnim = false;
+	private bool disable = false;
 
 #if UNITY_EDITOR
 	public float debugSphereRadius;
 #endif
 
-	void Start() {
+	private void Start() {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
+		PlayerEvents.toggleDeathScreen += OnDisableAI;
+		PlayerEvents.toggleEscapeMenu += OnDisableAI;
+	}
+
+	private void OnDestroy() {
+		PlayerEvents.toggleDeathScreen -= OnDisableAI;
+		PlayerEvents.toggleEscapeMenu -= OnDisableAI;
+	}
+
+	private void OnDisableAI() {
+		disable = true;
 	}
 
 	private void FixedUpdate() {
+		if (disable)
+			return;
+
 		rayCastTarget = player.transform.position + rayCastTargetOffset;
 
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
@@ -55,24 +69,16 @@ public class MonsterAI : MonoBehaviour {
 		}
 
 		if (!player.hidden && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
-			if (!inKillingAnim) {
-				inKillingAnim = true;
-				isRunning = false;
-				agent.isStopped = true;
+			disable = true;
+			isRunning = false;
+			agent.isStopped = true;
 
-				PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
-				PlayerEvents.OnTogglePlayerInput(false);
-				PlayerEvents.OnToggleUIInput(false);
-				monsterAnimator.SetTrigger("Kill");
-				player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
-				killCamA.gameObject.SetActive(true);
-			}
-
-			if (isRunning) {
-				agent.speed = monsterRunningSpeed;
-			} else {
-				agent.speed = monsterWalkingSpeed;
-			}
+			PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
+			PlayerEvents.OnTogglePlayerInput(false);
+			PlayerEvents.OnToggleUIInput(false);
+			monsterAnimator.SetTrigger("Kill");
+			player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+			killCamA.gameObject.SetActive(true);
 		}
 	}
 
@@ -88,8 +94,4 @@ public class MonsterAI : MonoBehaviour {
 		Gizmos.DrawSphere(agent.destination, debugSphereRadius);
 	}
 #endif
-
-	/*PSEUDO
-	If player within distance, attack player
-	 */
 }
