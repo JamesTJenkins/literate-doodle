@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 		UpdateSensitivity();
 		PlayerEvents.updateSensitivity += UpdateSensitivity;
 		PlayerEvents.togglePlayerInput += TogglePlayerInput;
-		PlayerEvents.togglePlayerInput += ToggleUIInput;
+		PlayerEvents.toggleUIInput += ToggleUIInput;
 		
 		stamina = 100f;
 		sprintingEnabled = true;
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour {
 
 		PlayerEvents.updateSensitivity -= UpdateSensitivity;
 		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
-		PlayerEvents.togglePlayerInput -= ToggleUIInput;
+		PlayerEvents.toggleUIInput -= ToggleUIInput;
 	}
 
 	private void Update() {
@@ -142,6 +142,7 @@ public class PlayerController : MonoBehaviour {
 			break;
 		case InteractType.Escape:
 			TogglePlayerInput(false);
+			ToggleUIInput(false);
 			PlayerEvents.OnToggleEscapeMenu();
 			PlayerEvents.OnDisplayHint(string.Empty);
 			break;
