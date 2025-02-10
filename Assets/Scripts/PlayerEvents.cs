@@ -6,8 +6,10 @@ public static class PlayerEvents {
 	public static Action forceClosePauseMenu;
 	public static Action togglePauseMenu;
 	public static Action toggleDeathScreen;
+	public static Action toggleEscapeMenu;
 	public static Action updateSensitivity;
 	public static Action saveSettings;
+	public static Action<string> displayHint;
 
 	public static void OnTogglePlayerInput(bool enable) {
 		togglePlayerInput?.Invoke(enable);
@@ -29,11 +31,19 @@ public static class PlayerEvents {
 		toggleDeathScreen?.Invoke();
 	}
 
+	public static void OnToggleEscapeMenu() {
+		toggleEscapeMenu?.Invoke();
+	}
+
 	public static void OnUpdateSensitivity() {
 		updateSensitivity?.Invoke();
 	}
 
 	public static void OnSaveSettings() {
 		saveSettings?.Invoke();
+	}
+
+	public static void OnDisplayHint(string hint) {
+		displayHint?.Invoke(hint);
 	}
 }

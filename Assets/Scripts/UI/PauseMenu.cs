@@ -4,6 +4,7 @@ public class PauseMenu : MonoBehaviour {
 	[SerializeField] private GameObject pauseMenu;
 	[SerializeField] private GameObject menu;
 	[SerializeField] private GameObject settings;
+	[SerializeField] private GameObject crosshair;
 
 	private void Start() {
 		PlayerEvents.togglePauseMenu += TogglePauseMenu;
@@ -13,6 +14,10 @@ public class PauseMenu : MonoBehaviour {
 	private void OnDestroy() {
 		PlayerEvents.togglePauseMenu -= TogglePauseMenu;
 		PlayerEvents.forceClosePauseMenu -= ForceClosePauseMenu;
+	}
+
+	public void Restart() {
+		Helper.LoadScene(Consts.Menu.MAIN_LEVEL_NAME);
 	}
 
 	public void MainMenu() {
@@ -28,6 +33,7 @@ public class PauseMenu : MonoBehaviour {
 		pauseMenu.SetActive(!pauseMenu.activeSelf);
 		Cursor.lockState = pauseMenu.activeSelf ? CursorLockMode.None : CursorLockMode.Confined;
 		Cursor.visible = pauseMenu.activeSelf;
+		crosshair.SetActive(!pauseMenu.activeSelf);
 		PlayerEvents.OnTogglePlayerInput(!pauseMenu.activeSelf);
 
 		if (settings.activeSelf) {

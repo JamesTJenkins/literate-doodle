@@ -68,11 +68,14 @@ public class MonsterAIEditor : Editor {
 				EditorGUILayout.BeginHorizontal();
 				GUI.color = i == selectedPointIndex ? Color.yellow : Color.white;
 				EditorGUILayout.LabelField($"Point {i}", GUILayout.Width(80));
-				if (GUILayout.Button("Select", GUILayout.Width(60))) {
+				if (GUILayout.Button("Select", GUILayout.Width(70))) {
 					selectedPointIndex = i;
 				}
-				if (GUILayout.Button("Remove", GUILayout.Width(60))) {
+				if (GUILayout.Button("Remove", GUILayout.Width(70))) {
 					travelPoints.DeleteArrayElementAtIndex(i);
+				}
+				if (GUILayout.Button("Duplicate", GUILayout.Width(70))) {
+					AddPoint(travelPoints.GetArrayElementAtIndex(i).vector3Value);
 				}
 				GUI.color = Color.white;
 				if (travelPoints.arraySize > 0) {
@@ -86,9 +89,7 @@ public class MonsterAIEditor : Editor {
 			EditorGUI.indentLevel--;
 			EditorGUILayout.Space();
 			if (GUILayout.Button("Add Point")) {
-				travelPoints.InsertArrayElementAtIndex(travelPoints.arraySize);
-				travelPoints.GetArrayElementAtIndex(travelPoints.arraySize - 1).vector3Value = Vector3.zero;
-				selectedPointIndex = travelPoints.arraySize - 1;
+				AddPoint(Vector3.zero);
 			}
 		}
 
@@ -124,5 +125,11 @@ public class MonsterAIEditor : Editor {
 				}
 			}
 		}
+	}
+
+	private void AddPoint(Vector3 position) {
+		travelPoints.InsertArrayElementAtIndex(travelPoints.arraySize);
+		travelPoints.GetArrayElementAtIndex(travelPoints.arraySize - 1).vector3Value = position;
+		selectedPointIndex = travelPoints.arraySize - 1;
 	}
 }

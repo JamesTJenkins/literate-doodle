@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,33 +8,44 @@ public class PlayerController : MonoBehaviour {
 	public InputSystem_Actions userInput;
 	public Camera playerCamera;
 
+	[Header("Interact")]
+	[SerializeField] private float interactDistance = 5f;
+	[SerializeField] private LayerMask interactLayers;
+	public bool hidden = false;
+
+	private HashSet<string> doorKeys = new HashSet<string>();
+	private HashSet<string> items = new HashSet<string>();
+
 	[Header("Looking")]
 	private float sensitivity;
 	private bool invertLook;
 
-	public float minLookAngle, maxLookAngle; //-89f, 89f
+	public float minLookAngle, maxLookAngle;
 	private float xRotation;
 
 	[Header("Movement")]
-	public float movementBaseSpeed; //5f
-	public float sprintingAddedSpeed; //2.5f
+	public float movementBaseSpeed;
+	public float sprintingAddedSpeed;
 	private bool isSprinting;
 
-	private float stamina = 100; 
-	public float staminaDrainRate; //10f
-	public float staminaRegenRate; //5f
+	private float stamina = 100;
+	public float staminaDrainRate;
+	public float staminaRegenRate;
 
 	public bool sprintingEnabled;
-	public float sprintEnableValue; //50f
+	public float sprintEnableValue;
 
 	private bool isGrounded;
 	public LayerMask groundMask;
 	public float checkSphereRadius;
 	public float groundOffset;
 
+	private GameObject prevHit;
+
 	private void Start() {
 		userInput = new InputSystem_Actions();
 		userInput.UI.Pause.performed += OnPause;
+		userInput.Player.Interact.performed += OnInteract;
 		userInput.Enable();
 
 		Cursor.lockState = CursorLockMode.Locked;
@@ -42,7 +54,7 @@ public class PlayerController : MonoBehaviour {
 		UpdateSensitivity();
 		PlayerEvents.updateSensitivity += UpdateSensitivity;
 		PlayerEvents.togglePlayerInput += TogglePlayerInput;
-		PlayerEvents.togglePlayerInput += ToggleUIInput;
+		PlayerEvents.toggleUIInput += ToggleUIInput;
 		
 		stamina = 100f;
 		sprintingEnabled = true;
@@ -51,24 +63,94 @@ public class PlayerController : MonoBehaviour {
 	private void OnDestroy() {
 		userInput.Disable();
 		userInput.UI.Pause.performed -= OnPause;
+		userInput.Player.Interact.performed -= OnInteract;
 		userInput.Dispose();
 
 		PlayerEvents.updateSensitivity -= UpdateSensitivity;
 		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
-		PlayerEvents.togglePlayerInput -= ToggleUIInput;
+		PlayerEvents.toggleUIInput -= ToggleUIInput;
 	}
 
 	private void Update() {
+		if (hidden)
+			return;
+
 		Looking(userInput.Player.Look.ReadValue<Vector2>());
 	}
 
 	private void FixedUpdate() {
+		if (hidden)
+			return;
+
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
 		Sprinting(userInput.Player.Sprint.IsPressed());
+
+		if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit newHit, interactDistance, interactLayers, QueryTriggerInteraction.Ignore)) {
+			if (newHit.collider.gameObject != prevHit) {
+				prevHit = newHit.collider.gameObject;
+				PlayerEvents.OnDisplayHint(Consts.Hints.INTERACT_HINT + prevHit.GetComponent<Interactable>().itemName);
+			}
+		} else {
+			if (prevHit != null) {
+				prevHit = null;
+				PlayerEvents.OnDisplayHint(string.Empty);
+			}
+		}
 	}
 
 	private void OnPause(InputAction.CallbackContext context) {
 		PlayerEvents.OnTogglePauseMenu();
+	}
+
+	private void OnInteract(InputAction.CallbackContext context) {
+		if (prevHit == null)
+			return;
+
+		Interactable interactable = prevHit.GetComponent<Interactable>();
+		switch (interactable.interactType) {
+		case InteractType.Door:
+			if (doorKeys.Contains(interactable.doorCode)) {
+				prevHit.GetComponentInParent<Animator>().SetTrigger(Consts.Anims.OPEN);
+			} else {
+				PlayerEvents.OnDisplayHint(Consts.Hints.DOOR_LOCKED);
+			}
+			break;
+		case InteractType.Item:
+			Debug.Log(interactable.itemName);
+			items.Add(interactable.itemName);
+			prevHit.SetActive(false);
+			break;
+		case InteractType.Key:
+			prevHit.SetActive(false);
+			doorKeys.Add(interactable.doorCode);
+			break;
+		case InteractType.Switch:
+			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
+			break;
+		case InteractType.Coffin:
+			if (hidden) {
+				hidden = false;
+				prevHit.transform.position -= interactable.inCoffinOffset;
+				interactable.coffinCam.gameObject.SetActive(false);
+				playerCamera.gameObject.SetActive(true);
+			} else {
+				hidden = true;
+				prevHit.transform.position += interactable.inCoffinOffset;
+				playerCamera.gameObject.SetActive(false);
+				interactable.coffinCam.gameObject.SetActive(true);
+			}
+			break;
+		case InteractType.Escape:
+			TogglePlayerInput(false);
+			ToggleUIInput(false);
+			PlayerEvents.OnToggleEscapeMenu();
+			PlayerEvents.OnDisplayHint(string.Empty);
+			break;
+		default:
+			Debug.Log(interactable.itemName);
+			Debug.LogWarning("Interactable type not found");
+			break;
+		}
 	}
 
 	private void TogglePlayerInput(bool enable) {
@@ -133,11 +215,13 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	#if UNITY_EDITOR
+#if UNITY_EDITOR
 	private void OnDrawGizmosSelected() {
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireSphere(transform.position + (Vector3.down * groundOffset), checkSphereRadius);
+
+		Gizmos.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * interactDistance);
 	}
-	#endif
+#endif
 
 }

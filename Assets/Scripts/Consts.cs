@@ -9,11 +9,17 @@ public class Consts {
 
 	public struct Anims {
 		public const string SPEED = "Speed";
+		public const string OPEN = "Open";
 	}
 
 	public struct Menu {
 		public const string MAINMENU_LEVEL_NAME = "MainMenu";
 		public const string LOAD_LEVEL_NAME = "Load";
 		public const string MAIN_LEVEL_NAME = "Main";
+	}
+
+	public struct Hints {
+		public const string INTERACT_HINT = "Press 'E' to interact with ";
+		public const string DOOR_LOCKED = "Don't have the key";
 	}
 }

@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class MonsterAI : MonoBehaviour {
 
 	public NavMeshAgent agent;
-	public GameObject player;
+	public PlayerController player;
 	public Vector3[] travelPoints;
 
 	public LayerMask playerLayerMask;
@@ -24,23 +24,37 @@ public class MonsterAI : MonoBehaviour {
 
 	public Camera killCamA;
 
-	private bool inKillingAnim = false;
+	private bool disable = false;
 
 #if UNITY_EDITOR
 	public float debugSphereRadius;
 #endif
 
-	void Start() {
+	private void Start() {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
+		PlayerEvents.toggleDeathScreen += OnDisableAI;
+		PlayerEvents.toggleEscapeMenu += OnDisableAI;
+	}
+
+	private void OnDestroy() {
+		PlayerEvents.toggleDeathScreen -= OnDisableAI;
+		PlayerEvents.toggleEscapeMenu -= OnDisableAI;
+	}
+
+	private void OnDisableAI() {
+		disable = true;
 	}
 
 	private void FixedUpdate() {
+		if (disable)
+			return;
+
 		rayCastTarget = player.transform.position + rayCastTargetOffset;
 
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 
-		if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
+		if (!player.hidden && Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
 			if (hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 				lastKnownPlayerPosition = rayCastTarget;
 				agent.destination = lastKnownPlayerPosition;
@@ -49,29 +63,23 @@ public class MonsterAI : MonoBehaviour {
 				isRunning = false;
 			}
 		}
-		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+
+		if (agent.remainingDistance <= agent.stoppingDistance) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
 
-		if (Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
-			if (!inKillingAnim) {
-				inKillingAnim = true;
-				isRunning = false;
-				agent.isStopped = true;
+		if (!player.hidden && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+			disable = true;
+			isRunning = false;
+			agent.isStopped = true;
 
-				PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
-				PlayerEvents.OnTogglePlayerInput(false);
-				PlayerEvents.OnToggleUIInput(false);
-				monsterAnimator.SetTrigger("Kill");
-				player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
-				killCamA.gameObject.SetActive(true);
-			}
-
-			if (isRunning) {
-				agent.speed = monsterRunningSpeed;
-			} else {
-				agent.speed = monsterWalkingSpeed;
-			}
+			PlayerEvents.OnDisplayHint(string.Empty);
+			PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
+			PlayerEvents.OnTogglePlayerInput(false);
+			PlayerEvents.OnToggleUIInput(false);
+			monsterAnimator.SetTrigger("Kill");
+			player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+			killCamA.gameObject.SetActive(true);
 		}
 	}
 
@@ -87,8 +95,4 @@ public class MonsterAI : MonoBehaviour {
 		Gizmos.DrawSphere(agent.destination, debugSphereRadius);
 	}
 #endif
-
-	/*PSEUDO
-	If player within distance, attack player
-	 */
 }
