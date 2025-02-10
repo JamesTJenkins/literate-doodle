@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class MonsterAI : MonoBehaviour {
 
 	public NavMeshAgent agent;
-	public GameObject player;
+	public PlayerController player;
 	public Vector3[] travelPoints;
 
 	public LayerMask playerLayerMask;
@@ -40,7 +40,7 @@ public class MonsterAI : MonoBehaviour {
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 
-		if (Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
+		if (!player.hidden && Physics.Raycast(rayCastOrigin.transform.position, rayCastTarget - rayCastOrigin.transform.position, out hitInfo, playerLayerMask)) {
 			if (hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 				lastKnownPlayerPosition = rayCastTarget;
 				agent.destination = lastKnownPlayerPosition;
@@ -49,11 +49,12 @@ public class MonsterAI : MonoBehaviour {
 				isRunning = false;
 			}
 		}
-		if (agent.remainingDistance <= agent.stoppingDistance && !hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+
+		if (agent.remainingDistance <= agent.stoppingDistance) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
 
-		if (Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
+		if (!player.hidden && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance && hitInfo.collider.CompareTag(Consts.Tags.PLAYER)) {
 			if (!inKillingAnim) {
 				inKillingAnim = true;
 				isRunning = false;

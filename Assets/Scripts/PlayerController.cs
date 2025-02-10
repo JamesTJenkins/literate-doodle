@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,9 +11,9 @@ public class PlayerController : MonoBehaviour {
 	[Header("Interact")]
 	[SerializeField] private float interactDistance = 5f;
 	[SerializeField] private LayerMask interactLayers;
+	public bool hidden = false;
 
-	private bool hasDoorKey;
-
+	private HashSet<string> doorKeys = new HashSet<string>();
 
 	[Header("Looking")]
 	public float sensitivity;
@@ -70,10 +71,16 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void Update() {
+		if (hidden)
+			return;
+
 		Looking(userInput.Player.Look.ReadValue<Vector2>());
 	}
 
 	private void FixedUpdate() {
+		if (hidden)
+			return;
+
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
 		Sprinting(userInput.Player.Sprint.IsPressed());
 
@@ -98,36 +105,41 @@ public class PlayerController : MonoBehaviour {
 		if (prevHit == null)
 			return;
 
-		GameObject interactObject = prevHit;
-		Interactable interactable = interactObject.GetComponent<Interactable>();
+		Interactable interactable = prevHit.GetComponent<Interactable>();
 		switch (interactable.interactType) {
 		case InteractType.Door:
-			if (hasDoorKey) {
-				interactObject.transform.parent.gameObject.SetActive(false);
+			if (doorKeys.Contains(interactable.doorCode)) {
+				prevHit.transform.parent.gameObject.SetActive(false);
 				Debug.Log($"Opened {interactable.itemName}");
 			} else {
 				Debug.Log("Door is locked");
 			}
 			break;
-
 		case InteractType.Item:
 			Debug.Log(interactable.itemName);
 			break;
-
 		case InteractType.Key:
-			interactObject.SetActive(false);
-			hasDoorKey = true;
+			prevHit.SetActive(false);
+			doorKeys.Add(interactable.doorCode);
 			Debug.Log($"Picked up {interactable.itemName}");
 			break;
-
 		case InteractType.Switch:
 			Debug.Log(interactable.itemName);
 			break;
-
 		case InteractType.Coffin:
 			Debug.Log(interactable.itemName);
+			if (hidden) {
+				hidden = false;
+				prevHit.transform.position -= interactable.inCoffinOffset;
+				interactable.coffinCam.gameObject.SetActive(false);
+				playerCamera.gameObject.SetActive(true);
+			} else {
+				hidden = true;
+				prevHit.transform.position += interactable.inCoffinOffset;
+				playerCamera.gameObject.SetActive(false);
+				interactable.coffinCam.gameObject.SetActive(true);
+			}
 			break;
-
 		default:
 			Debug.Log(interactable.itemName);
 			Debug.LogWarning("Interactable type not found");
