@@ -6,6 +6,7 @@ public enum InteractType {
 	Door,
 	Switch,
 	Coffin,
+	Escape,
 	None
 }
 

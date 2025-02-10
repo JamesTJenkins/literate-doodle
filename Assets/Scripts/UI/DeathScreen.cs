@@ -18,8 +18,4 @@ public class DeathScreen : MonoBehaviour {
 		Cursor.lockState = CursorLockMode.None;
 		Cursor.visible = true;
 	}
-
-	public void Restart() {
-		Helper.LoadScene(Consts.Menu.MAIN_LEVEL_NAME);
-	}
 }

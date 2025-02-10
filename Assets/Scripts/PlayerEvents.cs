@@ -6,6 +6,7 @@ public static class PlayerEvents {
 	public static Action forceClosePauseMenu;
 	public static Action togglePauseMenu;
 	public static Action toggleDeathScreen;
+	public static Action toggleEscapeMenu;
 	public static Action updateSensitivity;
 	public static Action saveSettings;
 	public static Action<string> displayHint;
@@ -28,6 +29,10 @@ public static class PlayerEvents {
 
 	public static void OnToggleDeathScreen() {
 		toggleDeathScreen?.Invoke();
+	}
+
+	public static void OnToggleEscapeMenu() {
+		toggleEscapeMenu?.Invoke();
 	}
 
 	public static void OnUpdateSensitivity() {

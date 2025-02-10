@@ -16,6 +16,10 @@ public class PauseMenu : MonoBehaviour {
 		PlayerEvents.forceClosePauseMenu -= ForceClosePauseMenu;
 	}
 
+	public void Restart() {
+		Helper.LoadScene(Consts.Menu.MAIN_LEVEL_NAME);
+	}
+
 	public void MainMenu() {
 		Helper.LoadScene(Consts.Menu.MAINMENU_LEVEL_NAME);
 	}
