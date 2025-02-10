@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3464342712262516231}
   - component: {fileID: 8313422771957803754}
   - component: {fileID: 1114471435190777718}
+  - component: {fileID: 7644307292513407607}
   m_Layer: 0
   m_Name: 3x4TunnelDoorKeyhole
   m_TagString: Untagged
@@ -109,6 +110,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.5718899, y: 0.28300652, z: 3.5421734}
   m_Center: {x: 0, y: 0, z: 1.7710867}
+--- !u!208 &7644307292513407607
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046489487881161838}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1.286, y: 0.16800001, z: 1.771}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 1.771}
+  m_TimeToStationary: 0.5
 --- !u!1 &8738652704893415262
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,3 +194,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Door
   interactType: 2
+  doorCode: 
+  inCoffinOffset: {x: 0, y: 0, z: 0}
+  coffinCam: {fileID: 0}
