@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8758394379926581685}
   - component: {fileID: 1350557431590127694}
   - component: {fileID: 1094055306630894920}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: 3x4TunnelDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 7873618831691518205}
   - component: {fileID: 6892353045067173585}
   - component: {fileID: 2278191767021242352}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: DoorNoKey
   m_TagString: Untagged
   m_Icon: {fileID: 0}
