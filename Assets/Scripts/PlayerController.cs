@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour {
 		if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit newHit, interactDistance, interactLayers, QueryTriggerInteraction.Ignore)) {
 			if (newHit.collider.gameObject != prevHit) {
 				prevHit = newHit.collider.gameObject;
-				PlayerEvents.OnDisplayHint(Consts.Menu.INTERACT_HINT + prevHit.GetComponent<Interactable>().itemName);
+				PlayerEvents.OnDisplayHint(Consts.Hints.INTERACT_HINT + prevHit.GetComponent<Interactable>().itemName);
 			}
 		} else {
 			if (prevHit != null) {
@@ -110,10 +110,9 @@ public class PlayerController : MonoBehaviour {
 		switch (interactable.interactType) {
 		case InteractType.Door:
 			if (doorKeys.Contains(interactable.doorCode)) {
-				prevHit.transform.parent.gameObject.SetActive(false);
-				Debug.Log($"Opened {interactable.itemName}");
+				prevHit.GetComponentInParent<Animator>().SetTrigger(Consts.Anims.OPEN);
 			} else {
-				Debug.Log("Door is locked");
+				PlayerEvents.OnDisplayHint(Consts.Hints.DOOR_LOCKED);
 			}
 			break;
 		case InteractType.Item:
@@ -124,13 +123,11 @@ public class PlayerController : MonoBehaviour {
 		case InteractType.Key:
 			prevHit.SetActive(false);
 			doorKeys.Add(interactable.doorCode);
-			Debug.Log($"Picked up {interactable.itemName}");
 			break;
 		case InteractType.Switch:
-			Debug.Log(interactable.itemName);
+			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
 			break;
 		case InteractType.Coffin:
-			Debug.Log(interactable.itemName);
 			if (hidden) {
 				hidden = false;
 				prevHit.transform.position -= interactable.inCoffinOffset;
@@ -144,7 +141,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			break;
 		case InteractType.Escape:
-			Debug.Log(interactable.itemName);
 			TogglePlayerInput(false);
 			PlayerEvents.OnToggleEscapeMenu();
 			PlayerEvents.OnDisplayHint(string.Empty);

@@ -8,6 +8,7 @@ public class InteractableEditor : Editor {
 	private SerializedProperty doorCode;
 	private SerializedProperty inCoffinOffset;
 	private SerializedProperty coffinCam;
+	private SerializedProperty doorToToggle;
 
 	private void OnEnable() {
 		itemName = serializedObject.FindProperty("itemName");
@@ -15,6 +16,7 @@ public class InteractableEditor : Editor {
 		doorCode = serializedObject.FindProperty("doorCode");
 		inCoffinOffset = serializedObject.FindProperty("inCoffinOffset");
 		coffinCam = serializedObject.FindProperty("coffinCam");
+		doorToToggle = serializedObject.FindProperty("doorToToggle");
 	}
 
 	public override void OnInspectorGUI() {
@@ -31,6 +33,9 @@ public class InteractableEditor : Editor {
 		case InteractType.Coffin:
 			EditorGUILayout.PropertyField(inCoffinOffset);
 			EditorGUILayout.PropertyField(coffinCam);
+			break;
+		case InteractType.Switch:
+			EditorGUILayout.PropertyField(doorToToggle);
 			break;
 		default:
 			break;
