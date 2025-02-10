@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
 	public bool hidden = false;
 
 	private HashSet<string> doorKeys = new HashSet<string>();
+	private HashSet<string> items = new HashSet<string>();
 
 	[Header("Looking")]
 	public float sensitivity;
@@ -117,6 +118,8 @@ public class PlayerController : MonoBehaviour {
 			break;
 		case InteractType.Item:
 			Debug.Log(interactable.itemName);
+			items.Add(interactable.itemName);
+			prevHit.SetActive(false);
 			break;
 		case InteractType.Key:
 			prevHit.SetActive(false);
@@ -139,6 +142,12 @@ public class PlayerController : MonoBehaviour {
 				playerCamera.gameObject.SetActive(false);
 				interactable.coffinCam.gameObject.SetActive(true);
 			}
+			break;
+		case InteractType.Escape:
+			Debug.Log(interactable.itemName);
+			TogglePlayerInput(false);
+			PlayerEvents.OnToggleEscapeMenu();
+			PlayerEvents.OnDisplayHint(string.Empty);
 			break;
 		default:
 			Debug.Log(interactable.itemName);
