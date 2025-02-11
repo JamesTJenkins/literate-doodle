@@ -3,47 +3,53 @@ using UnityEngine;
 
 [CustomEditor(typeof(MonsterAI))]
 public class MonsterAIEditor : Editor {
-	private SerializedProperty travelPoints;
 	private SerializedProperty agent;
 	private SerializedProperty player;
-	private SerializedProperty debugSphereRadius;
+	private SerializedProperty travelPoints;
 	private SerializedProperty playerLayerMask;
 	private SerializedProperty rayCastOrigin;
-	private SerializedProperty rayCastTargetOffset;
+	private SerializedProperty immediateAwarenessRange;
+	private SerializedProperty sightRange;
+	private SerializedProperty horizontalFov;
 	private SerializedProperty monsterWalkingSpeed;
 	private SerializedProperty monsterRunningSpeed;
-	private SerializedProperty monsterAnimator;
 	private SerializedProperty monsterAttackDistance;
+	private SerializedProperty monsterAnimator;
 	private SerializedProperty killCamA;
+	private SerializedProperty debugSphereRadius;
 
 	private int selectedPointIndex = -1;
 	private bool showTravelPoints = false;
 	private bool displayTravelPoints = true;
 
 	private void OnEnable() {
-		travelPoints = serializedObject.FindProperty("travelPoints");
 		agent = serializedObject.FindProperty("agent");
 		player = serializedObject.FindProperty("player");
-		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
+		travelPoints = serializedObject.FindProperty("travelPoints");
 		playerLayerMask = serializedObject.FindProperty("playerLayerMask");
 		rayCastOrigin = serializedObject.FindProperty("rayCastOrigin");
-		rayCastTargetOffset = serializedObject.FindProperty("rayCastTargetOffset");
+		immediateAwarenessRange = serializedObject.FindProperty("immediateAwarenessRange");
+		sightRange = serializedObject.FindProperty("sightRange");
+		horizontalFov = serializedObject.FindProperty("horizontalFov");
 		monsterWalkingSpeed = serializedObject.FindProperty("monsterWalkingSpeed");
 		monsterRunningSpeed = serializedObject.FindProperty("monsterRunningSpeed");
-		monsterAnimator = serializedObject.FindProperty("monsterAnimator");
 		monsterAttackDistance = serializedObject.FindProperty("monsterAttackDistance");
+		monsterAnimator = serializedObject.FindProperty("monsterAnimator");
 		killCamA = serializedObject.FindProperty("killCamA");
+		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
 	}
 
 	public override void OnInspectorGUI() {
 		serializedObject.Update();
 
-		EditorGUILayout.LabelField("RayCasting Options", EditorStyles.boldLabel);
+		EditorGUILayout.LabelField("Raycasting Options", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(agent);
 		EditorGUILayout.PropertyField(player);
 		EditorGUILayout.PropertyField(playerLayerMask);
 		EditorGUILayout.PropertyField(rayCastOrigin);
-		EditorGUILayout.PropertyField(rayCastTargetOffset);
+		EditorGUILayout.PropertyField(immediateAwarenessRange);
+		EditorGUILayout.PropertyField(sightRange);
+		EditorGUILayout.PropertyField(horizontalFov);
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Monster Speed", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(monsterWalkingSpeed);
@@ -102,26 +108,42 @@ public class MonsterAIEditor : Editor {
 	}
 
 	private void OnSceneGUI() {
-		MonsterAI monsterAI = (MonsterAI)target;
+		MonsterAI ai = (MonsterAI)target;
+		Handles.color = Color.yellow;
+
+		// Hori fov
+		Vector3 leftBoundary = Quaternion.AngleAxis(-ai.horizontalFov / 2, ai.transform.up) * ai.transform.forward;
+		Vector3 rightBoundary = Quaternion.AngleAxis(ai.horizontalFov / 2, ai.transform.up) * ai.transform.forward;
+		Handles.DrawLine(ai.transform.position, ai.transform.position + leftBoundary * ai.sightRange);
+		Handles.DrawLine(ai.transform.position, ai.transform.position + rightBoundary * ai.sightRange);
+		Handles.DrawWireArc(ai.transform.position, ai.transform.transform.up, leftBoundary, ai.horizontalFov, ai.sightRange);
+
+		// Immediate awareness range
+		Handles.DrawWireDisc(ai.transform.position, Vector3.up, ai.immediateAwarenessRange);
+
+		// Kill range
+		Handles.color = Color.red;
+		Handles.DrawWireDisc(ai.transform.position, Vector3.up, ai.monsterAttackDistance);
+
 		if (displayTravelPoints) {
-			foreach (Vector3 point in monsterAI.travelPoints) {
+			foreach (Vector3 point in ai.travelPoints) {
 				Handles.color = Color.red;
-				Handles.SphereHandleCap(0, point, Quaternion.identity, monsterAI.debugSphereRadius, EventType.Repaint);
+				Handles.SphereHandleCap(0, point, Quaternion.identity, ai.debugSphereRadius, EventType.Repaint);
 				if (
-					Handles.Button(point, Quaternion.identity, monsterAI.debugSphereRadius, monsterAI.debugSphereRadius, Handles.SphereHandleCap)
+					Handles.Button(point, Quaternion.identity, ai.debugSphereRadius, ai.debugSphereRadius, Handles.SphereHandleCap)
 				) {
-					selectedPointIndex = System.Array.IndexOf(monsterAI.travelPoints, point);
+					selectedPointIndex = System.Array.IndexOf(ai.travelPoints, point);
 					Repaint();
 				}
 			}
-			if (selectedPointIndex >= 0 && selectedPointIndex < monsterAI.travelPoints.Length) {
+			if (selectedPointIndex >= 0 && selectedPointIndex < ai.travelPoints.Length) {
 				Handles.color = Color.blue;
-				Handles.SphereHandleCap(0, monsterAI.travelPoints[selectedPointIndex], Quaternion.identity, monsterAI.debugSphereRadius, EventType.Repaint);
-				Vector3 newTargetPosition = Handles.PositionHandle(monsterAI.travelPoints[selectedPointIndex], Quaternion.identity);
+				Handles.SphereHandleCap(0, ai.travelPoints[selectedPointIndex], Quaternion.identity, ai.debugSphereRadius, EventType.Repaint);
+				Vector3 newTargetPosition = Handles.PositionHandle(ai.travelPoints[selectedPointIndex], Quaternion.identity);
 				if (EditorGUI.EndChangeCheck()) {
-					Undo.RecordObject(monsterAI, "Move Travel Point");
-					monsterAI.travelPoints[selectedPointIndex] = newTargetPosition;
-					EditorUtility.SetDirty(monsterAI);
+					Undo.RecordObject(ai, "Move Travel Point");
+					ai.travelPoints[selectedPointIndex] = newTargetPosition;
+					EditorUtility.SetDirty(ai);
 				}
 			}
 		}

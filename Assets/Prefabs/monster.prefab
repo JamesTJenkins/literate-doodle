@@ -5316,12 +5316,13 @@ MonoBehaviour:
     m_Bits: 64
   lastKnownPlayerPosition: {x: 0, y: 0, z: 0}
   rayCastOrigin: {fileID: 2082078867521691464}
-  rayCastTarget: {x: 0, y: 0, z: 0}
-  rayCastTargetOffset: {x: 0, y: 0.75, z: 0}
+  immediateAwarenessRange: 2
+  sightRange: 15
+  horizontalFov: 120
   monsterWalkingSpeed: 2.5
   monsterRunningSpeed: 5
   isRunning: 0
-  monsterAttackDistance: 2
+  monsterAttackDistance: 1.5
   monsterAnimator: {fileID: 9206637120059747152}
   killCamA: {fileID: 6659063624484393264}
   debugSphereRadius: 1

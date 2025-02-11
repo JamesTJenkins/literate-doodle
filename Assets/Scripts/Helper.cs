@@ -19,4 +19,10 @@ public static class Helper {
 
 		await SceneManager.UnloadSceneAsync(1);
 	}
+
+	public static float FlatDistance(Vector3 a, Vector3 b) {
+		a.y = 0;
+		b.y = 0;
+		return Vector3.Distance(a, b);
+	}
 }
