@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour {
 		switch (interactable.interactType) {
 		case InteractType.Door:
 			if (doorKeys.Contains(interactable.doorCode)) {
-				prevHit.GetComponentInParent<Animator>().SetTrigger(Consts.Anims.OPEN);
+				prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
 			} else {
 				PlayerEvents.OnDisplayHint(Consts.Hints.DOOR_LOCKED);
 			}
