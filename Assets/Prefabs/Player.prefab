@@ -97,12 +97,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 8144015376148120979}
   playerCamera: {fileID: 7235268080690332582}
-  interactDistance: 5
+  interactDistance: 2
   interactLayers:
     serializedVersion: 2
     m_Bits: 128
   hidden: 0
-  sensitivity: 1
   minLookAngle: -89
   maxLookAngle: 89
   movementBaseSpeed: 5
