@@ -10,6 +10,7 @@ public class Consts {
 	public struct Anims {
 		public const string SPEED = "Speed";
 		public const string OPEN = "Open";
+		public const string ON = "On";
 	}
 
 	public struct Menu {

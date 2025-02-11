@@ -125,6 +125,7 @@ public class PlayerController : MonoBehaviour {
 			doorKeys.Add(interactable.doorCode);
 			break;
 		case InteractType.Switch:
+			prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.ON);
 			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
 			break;
 		case InteractType.Coffin:
