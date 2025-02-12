@@ -1,5 +1,4 @@
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(Interactable))]
 public class InteractableEditor : Editor {
@@ -9,6 +8,7 @@ public class InteractableEditor : Editor {
 	private SerializedProperty inCoffinOffset;
 	private SerializedProperty coffinCam;
 	private SerializedProperty doorToToggle;
+	private SerializedProperty used;
 
 	private void OnEnable() {
 		itemName = serializedObject.FindProperty("itemName");
@@ -17,6 +17,7 @@ public class InteractableEditor : Editor {
 		inCoffinOffset = serializedObject.FindProperty("inCoffinOffset");
 		coffinCam = serializedObject.FindProperty("coffinCam");
 		doorToToggle = serializedObject.FindProperty("doorToToggle");
+		used = serializedObject.FindProperty("used");
 	}
 
 	public override void OnInspectorGUI() {
@@ -40,6 +41,8 @@ public class InteractableEditor : Editor {
 		default:
 			break;
 		}
+
+		EditorGUILayout.PropertyField(used);
 
 		serializedObject.ApplyModifiedProperties();
 		SceneView.RepaintAll();
