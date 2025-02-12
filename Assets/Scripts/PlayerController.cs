@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField] private LayerMask interactLayers;
 	public bool hidden = false;
 
-	private HashSet<string> doorKeys = new HashSet<string>();
-	private HashSet<string> items = new HashSet<string>();
+	private HashSet<string> doorKeys = new();
+	private HashSet<string> items = new();
 
 	[Header("Looking")]
 	private float sensitivity;
@@ -41,10 +41,13 @@ public class PlayerController : MonoBehaviour {
 	public float groundOffset;
 
 	private GameObject prevHit;
+	private bool escapeEnabled = false;
 
 	private void Start() {
 		userInput = new InputSystem_Actions();
 		userInput.UI.Pause.performed += OnPause;
+		userInput.UI.Quest.started += OnQuestViewStart;
+		userInput.UI.Quest.canceled += OnQuestViewStopped;
 		userInput.Player.Interact.performed += OnInteract;
 		userInput.Enable();
 
@@ -55,7 +58,8 @@ public class PlayerController : MonoBehaviour {
 		PlayerEvents.updateSensitivity += UpdateSensitivity;
 		PlayerEvents.togglePlayerInput += TogglePlayerInput;
 		PlayerEvents.toggleUIInput += ToggleUIInput;
-		
+		PlayerEvents.escapeEnabled += OnEscapeEnabled;
+
 		stamina = 100f;
 		sprintingEnabled = true;
 	}
@@ -63,12 +67,15 @@ public class PlayerController : MonoBehaviour {
 	private void OnDestroy() {
 		userInput.Disable();
 		userInput.UI.Pause.performed -= OnPause;
+		userInput.UI.Quest.started -= OnQuestViewStart;
+		userInput.UI.Quest.canceled -= OnQuestViewStopped;
 		userInput.Player.Interact.performed -= OnInteract;
 		userInput.Dispose();
 
 		PlayerEvents.updateSensitivity -= UpdateSensitivity;
 		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
 		PlayerEvents.toggleUIInput -= ToggleUIInput;
+		PlayerEvents.escapeEnabled -= OnEscapeEnabled;
 	}
 
 	private void Update() {
@@ -86,9 +93,11 @@ public class PlayerController : MonoBehaviour {
 		Sprinting(userInput.Player.Sprint.IsPressed());
 
 		if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit newHit, interactDistance, interactLayers, QueryTriggerInteraction.Ignore)) {
-			if (newHit.collider.gameObject != prevHit) {
-				prevHit = newHit.collider.gameObject;
-				PlayerEvents.OnDisplayHint(Consts.Hints.INTERACT_HINT + prevHit.GetComponent<Interactable>().itemName);
+			Interactable interact = newHit.collider.gameObject.GetComponent<Interactable>();
+
+			if (newHit.collider.gameObject != prevHit && !interact.used) {
+				prevHit = interact.gameObject;
+				PlayerEvents.OnDisplayHint(Consts.Hints.INTERACT_HINT + interact.itemName);
 			}
 		} else {
 			if (prevHit != null) {
@@ -102,6 +111,18 @@ public class PlayerController : MonoBehaviour {
 		PlayerEvents.OnTogglePauseMenu();
 	}
 
+	private void OnQuestViewStart(InputAction.CallbackContext context) {
+		PlayerEvents.OnShowQuestsStart();
+	}
+
+	private void OnQuestViewStopped(InputAction.CallbackContext context) {
+		PlayerEvents.OnShowQuestsStopped();
+	}
+
+	private void OnEscapeEnabled() {
+		escapeEnabled = true;
+	}
+
 	private void OnInteract(InputAction.CallbackContext context) {
 		if (prevHit == null)
 			return;
@@ -111,6 +132,7 @@ public class PlayerController : MonoBehaviour {
 		case InteractType.Door:
 			if (doorKeys.Contains(interactable.doorCode)) {
 				prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
+				ClearInteract(interactable);
 			} else {
 				PlayerEvents.OnDisplayHint(Consts.Hints.DOOR_LOCKED);
 			}
@@ -119,6 +141,7 @@ public class PlayerController : MonoBehaviour {
 			Debug.Log(interactable.itemName);
 			items.Add(interactable.itemName);
 			prevHit.SetActive(false);
+			PlayerEvents.OnItemPickup(interactable.itemName);
 			break;
 		case InteractType.Key:
 			prevHit.SetActive(false);
@@ -127,6 +150,7 @@ public class PlayerController : MonoBehaviour {
 		case InteractType.Switch:
 			prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.ON);
 			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
+			ClearInteract(interactable);
 			break;
 		case InteractType.Coffin:
 			if (hidden) {
@@ -142,10 +166,14 @@ public class PlayerController : MonoBehaviour {
 			}
 			break;
 		case InteractType.Escape:
-			TogglePlayerInput(false);
-			ToggleUIInput(false);
-			PlayerEvents.OnToggleEscapeMenu();
-			PlayerEvents.OnDisplayHint(string.Empty);
+			if (escapeEnabled) {
+				TogglePlayerInput(false);
+				ToggleUIInput(false);
+				PlayerEvents.OnToggleEscapeMenu();
+				PlayerEvents.OnDisplayHint(string.Empty);
+			} else {
+				PlayerEvents.OnDisplayHint(Consts.Hints.CANT_ESCAPE_YET);
+			}
 			break;
 		default:
 			Debug.Log(interactable.itemName);
@@ -214,6 +242,12 @@ public class PlayerController : MonoBehaviour {
 		if (stamina >= sprintEnableValue) {
 			sprintingEnabled = true;
 		}
+	}
+
+	private void ClearInteract(Interactable interact) {
+		interact.used = true;
+		prevHit = null;
+		PlayerEvents.OnDisplayHint(string.Empty);
 	}
 
 #if UNITY_EDITOR

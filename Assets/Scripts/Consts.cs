@@ -22,5 +22,12 @@ public class Consts {
 	public struct Hints {
 		public const string INTERACT_HINT = "Press 'E' to interact with ";
 		public const string DOOR_LOCKED = "Don't have the key";
+		public const string CANT_ESCAPE_YET = "Can't escape yet, must find the book";
+	}
+
+	public struct Quests {
+		public const string INITIAL_QUEST = "Find the Book of Death";
+		public const string BOOK_OF_DEATH = "Book of Death";
+		public const string ESCAPE_QUEST = "ESCAPE";
 	}
 }

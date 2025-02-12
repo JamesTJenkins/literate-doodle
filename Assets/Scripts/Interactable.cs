@@ -17,4 +17,5 @@ public class Interactable : MonoBehaviour {
 	public Vector3 inCoffinOffset;
 	public Camera coffinCam;
 	public GameObject doorToToggle;
+	public bool used;	// This is just for doors/switches so we dont use multiple times
 }
