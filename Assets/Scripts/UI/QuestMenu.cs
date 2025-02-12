@@ -18,6 +18,8 @@ public class QuestMenu : MonoBehaviour {
 		PlayerEvents.showQuestsStart += StartShow;
 		PlayerEvents.showQuestsStopped += TempShow;
 		PlayerEvents.itemPickedUp += OnItemPickup;
+		PlayerEvents.toggleEscapeMenu += OnEndMenu;
+		PlayerEvents.toggleDeathScreen += OnEndMenu;
 
 		CreateQuest(Consts.Quests.BOOK_OF_DEATH, Consts.Quests.INITIAL_QUEST);
 	}
@@ -26,6 +28,8 @@ public class QuestMenu : MonoBehaviour {
 		PlayerEvents.showQuestsStart -= StartShow;
 		PlayerEvents.showQuestsStopped -= TempShow;
 		PlayerEvents.itemPickedUp -= OnItemPickup;
+		PlayerEvents.toggleEscapeMenu -= OnEndMenu;
+		PlayerEvents.toggleDeathScreen -= OnEndMenu;
 	}
 
 	private void StartShow() {
@@ -56,6 +60,14 @@ public class QuestMenu : MonoBehaviour {
 			CreateQuest(Consts.Quests.ESCAPE_QUEST, Consts.Quests.ESCAPE_QUEST);
 			PlayerEvents.OnEscapeEnabled();
 		}
+	}
+
+	private void OnEndMenu() {
+		if (inCoroutine) {
+			StopCoroutine(TempShowQuests());
+		}
+
+		content.gameObject.SetActive(false);
 	}
 
 	private void CreateQuest(string questKey, string text) {
