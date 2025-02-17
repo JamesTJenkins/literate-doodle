@@ -27,9 +27,11 @@ public class MonsterAI : MonoBehaviour {
 	public bool playerSeenCoffin;
 	public bool canSee;
 	public bool checkLastKnown = false;
+	public float coffinCheckChancePercentage;
 
 	public float coffinCheckDistance;
 	public LayerMask coffinLayerMask;
+	private bool checkingCoffin = false;
 
 	private bool disable = false;
 	private RaycastHit hitInfo;
@@ -72,8 +74,13 @@ public class MonsterAI : MonoBehaviour {
 			isRunning = false;
 		}
 
+		if (agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance + 2.5f && checkingCoffin) {
+			KillEvent();
+		}
+
 		if (agent.remainingDistance <= agent.stoppingDistance) {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
+			checkingCoffin = false;
 		}
 
 		if (checkLastKnown && !canSee && agent.remainingDistance < agent.stoppingDistance) {
@@ -82,22 +89,26 @@ public class MonsterAI : MonoBehaviour {
 		}
 
 		if (canSee && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance) {
-			disable = true;
-			isRunning = false;
-			agent.isStopped = true;
-
-			PlayerEvents.OnDisplayHint(string.Empty);
-			PlayerEvents.OnForceClosePauseMenu();   // Always do this before disabling input since force closing pause menu will renable inputs
-			PlayerEvents.OnTogglePlayerInput(false);
-			PlayerEvents.OnToggleUIInput(false);
-			monsterAnimator.SetTrigger("Kill");
-			if (!player.playerCamera.gameObject.activeSelf && player.lastInteracted.interactType == InteractType.Coffin) {
-				player.lastInteracted.coffinCam.gameObject.SetActive(false);
-			} else {
-				player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
-			}
-			killCamA.gameObject.SetActive(true);
+			KillEvent();
 		}
+	}
+
+	public void KillEvent() {
+		disable = true;
+		isRunning = false;
+		agent.isStopped = true;
+
+		PlayerEvents.OnDisplayHint(string.Empty);
+		PlayerEvents.OnForceClosePauseMenu();   // Always do this before disabling input since force closing pause menu will renable inputs
+		PlayerEvents.OnTogglePlayerInput(false);
+		PlayerEvents.OnToggleUIInput(false);
+		monsterAnimator.SetTrigger("Kill");
+		if (!player.playerCamera.gameObject.activeSelf && player.lastInteracted.interactType == InteractType.Coffin) {
+			player.lastInteracted.coffinCam.gameObject.SetActive(false);
+		} else {
+			player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+		}
+		killCamA.gameObject.SetActive(true);
 	}
 
 	public bool CanSeePlayer() {
@@ -120,7 +131,6 @@ public class MonsterAI : MonoBehaviour {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -128,20 +138,13 @@ public class MonsterAI : MonoBehaviour {
 		Collider[] coffinCheckHit = Physics.OverlapSphere(rayCastOrigin.transform.position, coffinCheckDistance, coffinLayerMask);
 		foreach (Collider castHit in coffinCheckHit) {
 			if (castHit.CompareTag(Consts.Tags.INTERACT)) {
-				agent.destination = castHit.transform.position;
-				Debug.Log("Checking coffin");
+				if (Random.Range(0,100) >= coffinCheckChancePercentage) {
+					agent.destination = castHit.transform.position;
+					checkingCoffin = true;
+				}
 				return;
 			}
 		}
-		/*
-		 If agent destination == lastknownplayerposition
-		 spherecast to check nearest coffin
-		 select nearest coffin
-		 move to coffin
-		 check coffin
-		 if player is not there then select random destination
-		 else kill player
-		 */
 	}
 
 

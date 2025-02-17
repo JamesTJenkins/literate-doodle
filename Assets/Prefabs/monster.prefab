@@ -5327,6 +5327,8 @@ MonoBehaviour:
   killCamA: {fileID: 6659063624484393264}
   playerSeenCoffin: 0
   canSee: 0
+  checkLastKnown: 0
+  coffinCheckChancePercentage: 50
   coffinCheckDistance: 5
   coffinLayerMask:
     serializedVersion: 2

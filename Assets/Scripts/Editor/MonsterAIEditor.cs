@@ -20,6 +20,7 @@ public class MonsterAIEditor : Editor {
 	private SerializedProperty seenPlayerCoffin;
 	private SerializedProperty coffinCheckDistance;
 	private SerializedProperty coffinLayerMask;
+	private SerializedProperty coffinCheckChancePercentage;
 
 
 	private int selectedPointIndex = -1;
@@ -44,6 +45,7 @@ public class MonsterAIEditor : Editor {
 		seenPlayerCoffin = serializedObject.FindProperty("playerSeenCoffin");
 		coffinCheckDistance = serializedObject.FindProperty("coffinCheckDistance");
 		coffinLayerMask = serializedObject.FindProperty("coffinLayerMask");
+		coffinCheckChancePercentage = serializedObject.FindProperty("coffinCheckChancePercentage");
 	}
 
 	public override void OnInspectorGUI() {
@@ -76,6 +78,7 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.LabelField("Coffin Check", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(coffinCheckDistance);
 		EditorGUILayout.PropertyField(coffinLayerMask);
+		EditorGUILayout.PropertyField(coffinCheckChancePercentage);
 
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
