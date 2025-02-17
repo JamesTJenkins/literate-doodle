@@ -1,4 +1,6 @@
+﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 [CustomEditor(typeof(Interactable))]
 public class InteractableEditor : Editor {
@@ -8,7 +10,10 @@ public class InteractableEditor : Editor {
 	private SerializedProperty inCoffinOffset;
 	private SerializedProperty coffinCam;
 	private SerializedProperty doorToToggle;
-	private SerializedProperty used;
+	//private SerializedProperty used;	// Dont show this as not needed in inspector but leaving code in incase
+
+	private bool showDoorCodeSuggestions = false;
+	private bool showNameSuggestions = false;
 
 	private void OnEnable() {
 		itemName = serializedObject.FindProperty("itemName");
@@ -17,19 +22,19 @@ public class InteractableEditor : Editor {
 		inCoffinOffset = serializedObject.FindProperty("inCoffinOffset");
 		coffinCam = serializedObject.FindProperty("coffinCam");
 		doorToToggle = serializedObject.FindProperty("doorToToggle");
-		used = serializedObject.FindProperty("used");
+		//used = serializedObject.FindProperty("used");
 	}
 
 	public override void OnInspectorGUI() {
 		serializedObject.Update();
 
-		EditorGUILayout.PropertyField(itemName);
+		DisplayNames();
 		EditorGUILayout.PropertyField(interactType);
 
 		switch ((InteractType)interactType.enumValueIndex) {
 		case InteractType.Key:
 		case InteractType.Door:
-			EditorGUILayout.PropertyField(doorCode);
+			DisplayDoorcodes();
 			break;
 		case InteractType.Coffin:
 			EditorGUILayout.PropertyField(inCoffinOffset);
@@ -42,9 +47,82 @@ public class InteractableEditor : Editor {
 			break;
 		}
 
-		EditorGUILayout.PropertyField(used);
+		//EditorGUILayout.PropertyField(used);
 
 		serializedObject.ApplyModifiedProperties();
 		SceneView.RepaintAll();
+	}
+
+	private void OnSceneGUI() {
+		if (doorToToggle.objectReferenceValue != null) {
+			Handles.color = Color.red;
+			Handles.SphereHandleCap(0, ((GameObject)doorToToggle.objectReferenceValue).GetComponent<Transform>().position, Quaternion.identity, 1f, EventType.Repaint);
+		}
+	}
+
+	private void DisplayDoorcodes() {
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.PropertyField(doorCode);
+
+		if (GUILayout.Button("▼", GUILayout.Width(20))) {
+			showDoorCodeSuggestions = !showDoorCodeSuggestions;
+		}
+		EditorGUILayout.EndHorizontal();
+
+		if (!showDoorCodeSuggestions)
+			return;
+
+		Interactable i = (Interactable)target;
+		List<string> suggestions = new() { doorCode.stringValue };
+		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+		foreach (Interactable instance in allInstances) {
+			if (instance != i && instance.doorCode != string.Empty && !suggestions.Contains(instance.doorCode)) {
+				suggestions.Add(instance.doorCode);
+			}
+		}
+
+		int selectedIndex = 0;
+		if (suggestions.Count > 1) {
+			selectedIndex = EditorGUILayout.Popup("Suggestions", selectedIndex, suggestions.ToArray());
+
+			if (selectedIndex > 0) {
+				doorCode.stringValue = suggestions[selectedIndex];
+				EditorUtility.SetDirty(i);
+				showDoorCodeSuggestions = false;
+			}
+		}
+	}
+
+	private void DisplayNames() {
+		EditorGUILayout.BeginHorizontal();
+		EditorGUILayout.PropertyField(itemName);
+
+		if (GUILayout.Button("▼", GUILayout.Width(20))) {
+			showNameSuggestions = !showNameSuggestions;
+		}
+		EditorGUILayout.EndHorizontal();
+
+		if (!showNameSuggestions)
+			return;
+
+		Interactable i = (Interactable)target;
+		List<string> suggestions = new() { itemName.stringValue };
+		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+		foreach (Interactable instance in allInstances) {
+			if (instance != i && instance.itemName != string.Empty && !suggestions.Contains(instance.itemName)) {
+				suggestions.Add(instance.itemName);
+			}
+		}
+
+		int selectedIndex = 0;
+		if (suggestions.Count > 1) {
+			selectedIndex = EditorGUILayout.Popup("Suggestions", selectedIndex, suggestions.ToArray());
+
+			if (selectedIndex > 0) {
+				itemName.stringValue = suggestions[selectedIndex];
+				EditorUtility.SetDirty(i);
+				showNameSuggestions = false;
+			}
+		}
 	}
 }
