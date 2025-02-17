@@ -7,11 +7,13 @@ public class PlayerController : MonoBehaviour {
 	public CharacterController characterController;
 	public InputSystem_Actions userInput;
 	public Camera playerCamera;
+	public Interactable lastInteracted;
 
 	[Header("Interact")]
 	[SerializeField] private float interactDistance = 5f;
 	[SerializeField] private LayerMask interactLayers;
 	public bool hidden = false;
+	public bool setKill = false;
 
 	private HashSet<string> doorKeys = new HashSet<string>();
 	private HashSet<string> items = new HashSet<string>();
@@ -107,6 +109,7 @@ public class PlayerController : MonoBehaviour {
 			return;
 
 		Interactable interactable = prevHit.GetComponent<Interactable>();
+		lastInteracted = interactable;
 		switch (interactable.interactType) {
 		case InteractType.Door:
 			if (doorKeys.Contains(interactable.doorCode)) {

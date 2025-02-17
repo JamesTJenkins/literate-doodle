@@ -24,6 +24,8 @@ public class MonsterAI : MonoBehaviour {
 
 	public Camera killCamA;
 
+	public bool playerSeenCoffin;
+	public bool canSee;
 
 	private bool disable = false;
 	private RaycastHit hitInfo;
@@ -53,7 +55,9 @@ public class MonsterAI : MonoBehaviour {
 
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
-		bool canSee = CanSeePlayer();
+
+		playerSeenCoffin = player.hidden && canSee;
+		canSee = CanSeePlayer();
 
 		if (canSee) {
 			lastKnownPlayerPosition = player.transform.position;
@@ -77,13 +81,17 @@ public class MonsterAI : MonoBehaviour {
 			PlayerEvents.OnTogglePlayerInput(false);
 			PlayerEvents.OnToggleUIInput(false);
 			monsterAnimator.SetTrigger("Kill");
-			player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+			if (!player.playerCamera.gameObject.activeSelf && player.lastInteracted.interactType == InteractType.Coffin) {
+				player.lastInteracted.coffinCam.gameObject.SetActive(false);
+			} else {
+				player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
+			}
 			killCamA.gameObject.SetActive(true);
 		}
 	}
 
 	public bool CanSeePlayer() {
-		if (player.hidden)
+		if (player.hidden & !canSee)
 			return false;
 
 		float distance = Helper.FlatDistance(transform.position, player.transform.position);
@@ -105,6 +113,7 @@ public class MonsterAI : MonoBehaviour {
 
 		return false;
 	}
+
 
 #if UNITY_EDITOR
 	private void OnDrawGizmos() {
