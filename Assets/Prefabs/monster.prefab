@@ -5325,6 +5325,12 @@ MonoBehaviour:
   monsterAttackDistance: 1.5
   monsterAnimator: {fileID: 9206637120059747152}
   killCamA: {fileID: 6659063624484393264}
+  playerSeenCoffin: 0
+  canSee: 0
+  coffinCheckDistance: 5
+  coffinLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
   debugSphereRadius: 1
 --- !u!114 &650843904803231069
 MonoBehaviour:

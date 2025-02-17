@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1255419016915261978}
   m_Layer: 7
   m_Name: CoffinLid
-  m_TagString: Untagged
+  m_TagString: Interact
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,6 +106,7 @@ MonoBehaviour:
   doorCode: 
   inCoffinOffset: {x: 0, y: 0.1, z: 0}
   coffinCam: {fileID: 8701397294357036151}
+  doorToToggle: {fileID: 0}
 --- !u!65 &1255419016915261978
 BoxCollider:
   m_ObjectHideFlags: 0

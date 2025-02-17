@@ -18,6 +18,9 @@ public class MonsterAIEditor : Editor {
 	private SerializedProperty killCamA;
 	private SerializedProperty debugSphereRadius;
 	private SerializedProperty seenPlayerCoffin;
+	private SerializedProperty coffinCheckDistance;
+	private SerializedProperty coffinLayerMask;
+
 
 	private int selectedPointIndex = -1;
 	private bool showTravelPoints = false;
@@ -39,6 +42,8 @@ public class MonsterAIEditor : Editor {
 		killCamA = serializedObject.FindProperty("killCamA");
 		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
 		seenPlayerCoffin = serializedObject.FindProperty("playerSeenCoffin");
+		coffinCheckDistance = serializedObject.FindProperty("coffinCheckDistance");
+		coffinLayerMask = serializedObject.FindProperty("coffinLayerMask");
 	}
 
 	public override void OnInspectorGUI() {
@@ -67,6 +72,11 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Player Sighting", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(seenPlayerCoffin);
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Coffin Check", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(coffinCheckDistance);
+		EditorGUILayout.PropertyField(coffinLayerMask);
+
 
 		showTravelPoints = EditorGUILayout.Foldout(showTravelPoints, "Travel Points");
 		if (showTravelPoints) {
@@ -129,6 +139,10 @@ public class MonsterAIEditor : Editor {
 		// Kill range
 		Handles.color = Color.red;
 		Handles.DrawWireDisc(ai.transform.position, Vector3.up, ai.monsterAttackDistance);
+
+		// Coffin check range
+		Handles.color = Color.magenta;
+		Handles.DrawWireDisc(ai.transform.position, Vector3.up, ai.coffinCheckDistance);
 
 		if (displayTravelPoints) {
 			foreach (Vector3 point in ai.travelPoints) {

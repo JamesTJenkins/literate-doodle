@@ -26,6 +26,10 @@ public class MonsterAI : MonoBehaviour {
 
 	public bool playerSeenCoffin;
 	public bool canSee;
+	public bool checkLastKnown = false;
+
+	public float coffinCheckDistance;
+	public LayerMask coffinLayerMask;
 
 	private bool disable = false;
 	private RaycastHit hitInfo;
@@ -62,6 +66,7 @@ public class MonsterAI : MonoBehaviour {
 		if (canSee) {
 			lastKnownPlayerPosition = player.transform.position;
 			agent.destination = lastKnownPlayerPosition;
+			checkLastKnown = true;
 			isRunning = true;
 		} else {
 			isRunning = false;
@@ -71,13 +76,18 @@ public class MonsterAI : MonoBehaviour {
 			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		}
 
+		if (checkLastKnown && !canSee && agent.remainingDistance < agent.stoppingDistance) {
+			SelectCoffinToCheck();
+			checkLastKnown = false;
+		}
+
 		if (canSee && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance) {
 			disable = true;
 			isRunning = false;
 			agent.isStopped = true;
 
 			PlayerEvents.OnDisplayHint(string.Empty);
-			PlayerEvents.OnForceClosePauseMenu();	// Always do this before disabling input since force closing pause menu will renable inputs
+			PlayerEvents.OnForceClosePauseMenu();   // Always do this before disabling input since force closing pause menu will renable inputs
 			PlayerEvents.OnTogglePlayerInput(false);
 			PlayerEvents.OnToggleUIInput(false);
 			monsterAnimator.SetTrigger("Kill");
@@ -112,6 +122,26 @@ public class MonsterAI : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	public void SelectCoffinToCheck() {
+		Collider[] coffinCheckHit = Physics.OverlapSphere(rayCastOrigin.transform.position, coffinCheckDistance, coffinLayerMask);
+		foreach (Collider castHit in coffinCheckHit) {
+			if (castHit.CompareTag(Consts.Tags.INTERACT)) {
+				agent.destination = castHit.transform.position;
+				Debug.Log("Checking coffin");
+				return;
+			}
+		}
+		/*
+		 If agent destination == lastknownplayerposition
+		 spherecast to check nearest coffin
+		 select nearest coffin
+		 move to coffin
+		 check coffin
+		 if player is not there then select random destination
+		 else kill player
+		 */
 	}
 
 
