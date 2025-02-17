@@ -137,11 +137,9 @@ public class MonsterAI : MonoBehaviour {
 	public void SelectCoffinToCheck() {
 		Collider[] coffinCheckHit = Physics.OverlapSphere(rayCastOrigin.transform.position, coffinCheckDistance, coffinLayerMask);
 		foreach (Collider castHit in coffinCheckHit) {
-			if (castHit.CompareTag(Consts.Tags.INTERACT)) {
-				if (Random.Range(0,100) >= coffinCheckChancePercentage) {
-					agent.destination = castHit.transform.position;
-					checkingCoffin = true;
-				}
+			if (castHit.CompareTag(Consts.Tags.INTERACT) && Random.Range(0, 100) >= coffinCheckChancePercentage) {
+				agent.destination = castHit.transform.position;
+				checkingCoffin = true;
 				return;
 			}
 		}
