@@ -28,13 +28,15 @@ public class InteractableEditor : Editor {
 	public override void OnInspectorGUI() {
 		serializedObject.Update();
 
-		DisplayNames();
+		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+
+		DisplayNames(allInstances);
 		EditorGUILayout.PropertyField(interactType);
 
 		switch ((InteractType)interactType.enumValueIndex) {
 		case InteractType.Key:
 		case InteractType.Door:
-			DisplayDoorcodes();
+			DisplayDoorcodes(allInstances);
 			break;
 		case InteractType.Coffin:
 			EditorGUILayout.PropertyField(inCoffinOffset);
@@ -58,9 +60,29 @@ public class InteractableEditor : Editor {
 			Handles.color = Color.red;
 			Handles.SphereHandleCap(0, ((GameObject)doorToToggle.objectReferenceValue).GetComponent<Transform>().position, Quaternion.identity, 1f, EventType.Repaint);
 		}
+
+		if ((InteractType)interactType.enumValueIndex == InteractType.Key) {
+			Handles.color = Color.red;
+			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+			foreach (Interactable instance in allInstances) {
+				if (instance.interactType == InteractType.Door && instance.doorCode == doorCode.stringValue) {
+					Handles.SphereHandleCap(0, instance.transform.position, Quaternion.identity, 1f, EventType.Repaint);
+				}
+			}
+		}
+
+		if ((InteractType)interactType.enumValueIndex == InteractType.Door) {
+			Handles.color = new Color(1f, 0f, 0f, .5f);	// So i can actually see the key when its highlighted
+			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+			foreach (Interactable instance in allInstances) {
+				if (instance.interactType == InteractType.Key && instance.doorCode == doorCode.stringValue) {
+					Handles.SphereHandleCap(0, instance.transform.position, Quaternion.identity, 1f, EventType.Repaint);
+				}
+			}
+		}
 	}
 
-	private void DisplayDoorcodes() {
+	private void DisplayDoorcodes(Interactable[] allInstances) {
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.PropertyField(doorCode);
 
@@ -74,7 +96,6 @@ public class InteractableEditor : Editor {
 
 		Interactable i = (Interactable)target;
 		List<string> suggestions = new() { doorCode.stringValue };
-		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
 		foreach (Interactable instance in allInstances) {
 			if (instance != i && instance.doorCode != string.Empty && !suggestions.Contains(instance.doorCode)) {
 				suggestions.Add(instance.doorCode);
@@ -93,7 +114,7 @@ public class InteractableEditor : Editor {
 		}
 	}
 
-	private void DisplayNames() {
+	private void DisplayNames(Interactable[] allInstances) {
 		EditorGUILayout.BeginHorizontal();
 		EditorGUILayout.PropertyField(itemName);
 
@@ -107,7 +128,6 @@ public class InteractableEditor : Editor {
 
 		Interactable i = (Interactable)target;
 		List<string> suggestions = new() { itemName.stringValue };
-		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
 		foreach (Interactable instance in allInstances) {
 			if (instance != i && instance.itemName != string.Empty && !suggestions.Contains(instance.itemName)) {
 				suggestions.Add(instance.itemName);
