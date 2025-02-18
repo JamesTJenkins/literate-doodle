@@ -5310,7 +5310,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 921202350658110953}
   player: {fileID: 0}
-  travelPoints: []
+  firstSectionTravelPoints: []
+  secondSectionTravelPoints: []
+  playerYLocationForSecondSection: -6
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64

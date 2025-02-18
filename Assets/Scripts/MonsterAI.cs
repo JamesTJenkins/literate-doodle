@@ -6,7 +6,9 @@ public class MonsterAI : MonoBehaviour {
 
 	public NavMeshAgent agent;
 	public PlayerController player;
-	public Vector3[] travelPoints;
+	public Vector3[] firstSectionTravelPoints;
+	public Vector3[] secondSectionTravelPoints;
+	public float playerYLocationForSecondSection;
 
 	public LayerMask playerLayerMask;
 	public Vector3 lastKnownPlayerPosition;
@@ -37,17 +39,19 @@ public class MonsterAI : MonoBehaviour {
 	private bool disable = false;
 	private RaycastHit hitInfo;
 
-	private HashSet<int> invalidPointIndexes = new();
+	private HashSet<int> firstSectionInvalidPointIndexes = new();
+	private HashSet<int> secondSectionInvalidPointIndexes = new();
 
 #if UNITY_EDITOR
 	public float debugSphereRadius;
 #endif
 
 	private void Start() {
-		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		PlayerEvents.toggleDeathScreen += OnDisableAI;
 		PlayerEvents.toggleEscapeMenu += OnDisableAI;
 		PlayerEvents.resetMonsterInvalidPoints += OnResetMonsterInvalidPoints;
+
+		SetNewPatrolPoint();
 	}
 
 	private void OnDestroy() {
@@ -57,7 +61,8 @@ public class MonsterAI : MonoBehaviour {
 	}
 
 	private void OnResetMonsterInvalidPoints() {
-		invalidPointIndexes.Clear();
+		firstSectionInvalidPointIndexes.Clear();
+		secondSectionInvalidPointIndexes.Clear();
 	}
 
 	private void OnDisableAI() {
@@ -103,24 +108,28 @@ public class MonsterAI : MonoBehaviour {
 	}
 
 	private void SetNewPatrolPoint() {
+		// This will need some changes if more parts are added but will do for now
+		bool secondSection = player.transform.position.y < playerYLocationForSecondSection;
+		int length = secondSection ? secondSectionTravelPoints.Length : firstSectionTravelPoints.Length;
+
 		bool validPoint = false;
 		NavMeshPath path = new();
 		while (!validPoint) {
 			// Picks random index
-			int index = Random.Range(0, travelPoints.Length);
+			int index = Random.Range(0, length);
 			// If invalid increment by 1 until find a valid index
-			while (invalidPointIndexes.Contains(index)) {
+			while ((secondSection ? secondSectionInvalidPointIndexes : firstSectionInvalidPointIndexes).Contains(index)) {
 				index++;
-				if (index >= travelPoints.Length) {
+				if (index >= length) {
 					index = 0;
 				}
 			}
 
 			// Check if travel point is valid and adds index to invalid if cant be done so doesnt check again
-			if (agent.CalculatePath(travelPoints[index], path)) {
+			if (agent.CalculatePath((secondSection ? secondSectionTravelPoints : firstSectionTravelPoints)[index], path)) {
 				validPoint = true;
 			} else {
-				invalidPointIndexes.Add(index);
+				(secondSection ? secondSectionInvalidPointIndexes : firstSectionInvalidPointIndexes).Add(index);
 			}
 		}
 
