@@ -14,6 +14,7 @@ public static class PlayerEvents {
 	public static Action escapeEnabled;
 	public static Action<string> displayHint;
 	public static Action<string> itemPickedUp;
+	public static Action resetMonsterInvalidPoints;
 
 	public static void OnTogglePlayerInput(bool enable) {
 		togglePlayerInput?.Invoke(enable);
@@ -65,5 +66,9 @@ public static class PlayerEvents {
 
 	public static void OnItemPickup(string itemName) {
 		itemPickedUp?.Invoke(itemName);
+	}
+
+	public static void OnResetMonsterInvalidPoints() {
+		resetMonsterInvalidPoints?.Invoke();
 	}
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,6 +37,8 @@ public class MonsterAI : MonoBehaviour {
 	private bool disable = false;
 	private RaycastHit hitInfo;
 
+	private HashSet<int> invalidPointIndexes = new();
+
 #if UNITY_EDITOR
 	public float debugSphereRadius;
 #endif
@@ -44,11 +47,17 @@ public class MonsterAI : MonoBehaviour {
 		agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
 		PlayerEvents.toggleDeathScreen += OnDisableAI;
 		PlayerEvents.toggleEscapeMenu += OnDisableAI;
+		PlayerEvents.resetMonsterInvalidPoints += OnResetMonsterInvalidPoints;
 	}
 
 	private void OnDestroy() {
 		PlayerEvents.toggleDeathScreen -= OnDisableAI;
 		PlayerEvents.toggleEscapeMenu -= OnDisableAI;
+		PlayerEvents.resetMonsterInvalidPoints -= OnResetMonsterInvalidPoints;
+	}
+
+	private void OnResetMonsterInvalidPoints() {
+		invalidPointIndexes.Clear();
 	}
 
 	private void OnDisableAI() {
@@ -79,7 +88,7 @@ public class MonsterAI : MonoBehaviour {
 		}
 
 		if (agent.remainingDistance <= agent.stoppingDistance) {
-			agent.destination = travelPoints[Random.Range(0, travelPoints.Length)];
+			SetNewPatrolPoint();
 			checkingCoffin = false;
 		}
 
@@ -91,6 +100,31 @@ public class MonsterAI : MonoBehaviour {
 		if (canSee && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance) {
 			KillEvent();
 		}
+	}
+
+	private void SetNewPatrolPoint() {
+		bool validPoint = false;
+		NavMeshPath path = new();
+		while (!validPoint) {
+			// Picks random index
+			int index = Random.Range(0, travelPoints.Length);
+			// If invalid increment by 1 until find a valid index
+			while (invalidPointIndexes.Contains(index)) {
+				index++;
+				if (index >= travelPoints.Length) {
+					index = 0;
+				}
+			}
+
+			// Check if travel point is valid and adds index to invalid if cant be done so doesnt check again
+			if (agent.CalculatePath(travelPoints[index], path)) {
+				validPoint = true;
+			} else {
+				invalidPointIndexes.Add(index);
+			}
+		}
+
+		agent.path = path;
 	}
 
 	public void KillEvent() {

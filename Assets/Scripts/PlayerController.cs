@@ -136,6 +136,7 @@ public class PlayerController : MonoBehaviour {
 			if (doorKeys.Contains(interactable.doorCode)) {
 				prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
 				ClearInteract(interactable);
+				PlayerEvents.OnResetMonsterInvalidPoints();
 			} else {
 				PlayerEvents.OnDisplayHint(Consts.Hints.DOOR_LOCKED);
 			}
@@ -154,6 +155,7 @@ public class PlayerController : MonoBehaviour {
 			prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.ON);
 			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
 			ClearInteract(interactable);
+			PlayerEvents.OnResetMonsterInvalidPoints();
 			break;
 		case InteractType.Coffin:
 			if (hidden) {
