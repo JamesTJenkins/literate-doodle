@@ -5318,7 +5318,7 @@ MonoBehaviour:
   rayCastOrigin: {fileID: 2082078867521691464}
   immediateAwarenessRange: 2
   sightRange: 15
-  horizontalFov: 120
+  horizontalFov: 150
   monsterWalkingSpeed: 2.5
   monsterRunningSpeed: 5
   isRunning: 0
