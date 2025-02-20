@@ -155,6 +155,7 @@ public class MonsterAI : MonoBehaviour {
 		disable = true;
 		isRunning = false;
 		agent.isStopped = true;
+		agent.velocity = Vector3.zero;
 		monsterAnimator.speed = 1;
 
 		PlayerEvents.OnDisplayHint(string.Empty);
