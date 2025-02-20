@@ -19,6 +19,11 @@ public class MonsterAI : MonoBehaviour {
 
 	public float monsterWalkingSpeed;
 	public float monsterRunningSpeed;
+
+	public AnimationCurve monsterSpeedRamp;
+	private float moveDuration = 0f;
+	public float timeToFullSpeed;
+
 	public bool isRunning;
 
 	public float monsterAttackDistance;
@@ -73,6 +78,7 @@ public class MonsterAI : MonoBehaviour {
 		if (disable)
 			return;
 
+
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 
@@ -84,8 +90,17 @@ public class MonsterAI : MonoBehaviour {
 			agent.destination = lastKnownPlayerPosition;
 			checkLastKnown = true;
 			isRunning = true;
+
+			moveDuration = Mathf.Clamp(moveDuration + Time.fixedDeltaTime, 0, timeToFullSpeed);
+			;
+			agent.speed = monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed);
+			monsterAnimator.speed = agent.speed - Mathf.Sqrt(agent.speed);
 		} else {
 			isRunning = false;
+
+			moveDuration = Mathf.Clamp(moveDuration - Time.fixedDeltaTime, 0, timeToFullSpeed);
+			agent.speed = agent.speed > monsterRunningSpeed ? monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed) : monsterWalkingSpeed;
+			monsterAnimator.speed = agent.speed > monsterRunningSpeed ? agent.speed - Mathf.Sqrt(agent.speed) : monsterWalkingSpeed;
 		}
 
 		if (agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance + 2.5f && checkingCoffin) {
@@ -140,6 +155,8 @@ public class MonsterAI : MonoBehaviour {
 		disable = true;
 		isRunning = false;
 		agent.isStopped = true;
+		agent.velocity = Vector3.zero;
+		monsterAnimator.speed = 1;
 
 		PlayerEvents.OnDisplayHint(string.Empty);
 		PlayerEvents.OnForceClosePauseMenu();   // Always do this before disabling input since force closing pause menu will renable inputs
