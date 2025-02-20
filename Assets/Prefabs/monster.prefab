@@ -5312,7 +5312,9 @@ MonoBehaviour:
   player: {fileID: 0}
   firstSectionTravelPoints: []
   secondSectionTravelPoints: []
+  thirdSectionTravelPoints: []
   playerYLocationForSecondSection: -6
+  playerYLocationForThirdSection: -26
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 64

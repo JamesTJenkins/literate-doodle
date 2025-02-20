@@ -8,8 +8,10 @@ public class MonsterAIEditor : Editor {
 
 	private SerializedProperty firstSectionTravelPoints;
 	private SerializedProperty secondSectionTravelPoints;
+	private SerializedProperty thirdSectionTravelPoints;
 
 	private SerializedProperty playerYLocationForSecondSection;
+	private SerializedProperty playerYLocationForThirdSection;
 
 	private SerializedProperty playerLayerMask;
 	private SerializedProperty rayCastOrigin;
@@ -41,6 +43,8 @@ public class MonsterAIEditor : Editor {
 	private bool displayFirstSectionTravelPoints = true;
 	private bool showSecondSectionTravelPoints = false;
 	private bool displaySecondSectionTravelPoints = true;
+	private bool showThirdSectionTravelPoints = false;
+	private bool displayThirdSectionTravelPoints = true;
 
 	private void OnEnable() {
 		agent = serializedObject.FindProperty("agent");
@@ -48,8 +52,10 @@ public class MonsterAIEditor : Editor {
 
 		firstSectionTravelPoints = serializedObject.FindProperty("firstSectionTravelPoints");
 		secondSectionTravelPoints = serializedObject.FindProperty("secondSectionTravelPoints");
+		thirdSectionTravelPoints = serializedObject.FindProperty("thirdSectionTravelPoints");
 
 		playerYLocationForSecondSection = serializedObject.FindProperty("playerYLocationForSecondSection");
+		playerYLocationForThirdSection = serializedObject.FindProperty("playerYLocationForThirdSection");
 
 		playerLayerMask = serializedObject.FindProperty("playerLayerMask");
 		rayCastOrigin = serializedObject.FindProperty("rayCastOrigin");
@@ -111,8 +117,10 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.PropertyField(coffinCheckChancePercentage);
 
 		EditorGUILayout.PropertyField(playerYLocationForSecondSection);
+		EditorGUILayout.PropertyField(playerYLocationForThirdSection);
 		CreateTravelPointsDropdown("First Section Travel Points", ref showFirstSectionTravelPoints, ref displayFirstSectionTravelPoints, ref firstSectionTravelPoints);
 		CreateTravelPointsDropdown("Second Section Travel Points", ref showSecondSectionTravelPoints, ref displaySecondSectionTravelPoints, ref secondSectionTravelPoints);
+		CreateTravelPointsDropdown("Third Section Travel Points", ref showThirdSectionTravelPoints, ref displayThirdSectionTravelPoints, ref thirdSectionTravelPoints);
 
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Editor", EditorStyles.boldLabel);
@@ -150,6 +158,10 @@ public class MonsterAIEditor : Editor {
 
 		if (displaySecondSectionTravelPoints) {
 			DisplayTravelPoints("Second Section Travel Points", ref ai.secondSectionTravelPoints, ai.debugSphereRadius, Color.magenta);
+		}
+
+		if (displayThirdSectionTravelPoints) {
+			DisplayTravelPoints("Third Section Travel Points", ref ai.thirdSectionTravelPoints, ai.debugSphereRadius, Color.white);
 		}
 	}
 

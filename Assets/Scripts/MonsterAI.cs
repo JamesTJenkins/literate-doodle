@@ -8,7 +8,9 @@ public class MonsterAI : MonoBehaviour {
 	public PlayerController player;
 	public Vector3[] firstSectionTravelPoints;
 	public Vector3[] secondSectionTravelPoints;
+	public Vector3[] thirdSectionTravelPoints;
 	public float playerYLocationForSecondSection;
+	public float playerYLocationForThirdSection;
 
 	public LayerMask playerLayerMask;
 	public Vector3 lastKnownPlayerPosition;
@@ -46,6 +48,7 @@ public class MonsterAI : MonoBehaviour {
 
 	private HashSet<int> firstSectionInvalidPointIndexes = new();
 	private HashSet<int> secondSectionInvalidPointIndexes = new();
+	private HashSet<int> thirdSectionInvalidPointIndexes = new();
 
 #if UNITY_EDITOR
 	public float debugSphereRadius;
@@ -68,6 +71,7 @@ public class MonsterAI : MonoBehaviour {
 	private void OnResetMonsterInvalidPoints() {
 		firstSectionInvalidPointIndexes.Clear();
 		secondSectionInvalidPointIndexes.Clear();
+		thirdSectionInvalidPointIndexes.Clear();
 	}
 
 	private void OnDisableAI() {
@@ -77,7 +81,6 @@ public class MonsterAI : MonoBehaviour {
 	private void FixedUpdate() {
 		if (disable)
 			return;
-
 
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
@@ -92,7 +95,6 @@ public class MonsterAI : MonoBehaviour {
 			isRunning = true;
 
 			moveDuration = Mathf.Clamp(moveDuration + Time.fixedDeltaTime, 0, timeToFullSpeed);
-			;
 			agent.speed = monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed);
 			monsterAnimator.speed = agent.speed - Mathf.Sqrt(agent.speed);
 		} else {
@@ -122,29 +124,53 @@ public class MonsterAI : MonoBehaviour {
 		}
 	}
 
+	private Vector3[] GetSectionPoints() {
+		if (player.transform.position.y < playerYLocationForSecondSection) {
+			if (player.transform.position.y < playerYLocationForThirdSection) {
+				return thirdSectionTravelPoints;
+			}
+
+			return secondSectionTravelPoints;
+		}
+
+		return firstSectionTravelPoints;
+	}
+
+	private HashSet<int> GetSectionValidIndexes() {
+		if (player.transform.position.y < playerYLocationForSecondSection) {
+			if (player.transform.position.y < playerYLocationForThirdSection) {
+				return thirdSectionInvalidPointIndexes;
+			}
+
+			return secondSectionInvalidPointIndexes;
+		}
+
+		return firstSectionInvalidPointIndexes;
+	}
+
 	private void SetNewPatrolPoint() {
 		// This will need some changes if more parts are added but will do for now
-		bool secondSection = player.transform.position.y < playerYLocationForSecondSection;
-		int length = secondSection ? secondSectionTravelPoints.Length : firstSectionTravelPoints.Length;
+		Vector3[] points = GetSectionPoints();
+		HashSet<int> indexes = GetSectionValidIndexes();
 
 		bool validPoint = false;
 		NavMeshPath path = new();
 		while (!validPoint) {
 			// Picks random index
-			int index = Random.Range(0, length);
+			int index = Random.Range(0, points.Length);
 			// If invalid increment by 1 until find a valid index
-			while ((secondSection ? secondSectionInvalidPointIndexes : firstSectionInvalidPointIndexes).Contains(index)) {
+			while (indexes.Contains(index)) {
 				index++;
-				if (index >= length) {
+				if (index >= points.Length) {
 					index = 0;
 				}
 			}
 
 			// Check if travel point is valid and adds index to invalid if cant be done so doesnt check again
-			if (agent.CalculatePath((secondSection ? secondSectionTravelPoints : firstSectionTravelPoints)[index], path)) {
+			if (agent.CalculatePath(points[index], path)) {
 				validPoint = true;
 			} else {
-				(secondSection ? secondSectionInvalidPointIndexes : firstSectionInvalidPointIndexes).Add(index);
+				indexes.Add(index);
 			}
 		}
 
