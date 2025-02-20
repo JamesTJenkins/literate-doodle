@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,20 +5,31 @@ using UnityEngine;
 public class MonsterAIEditor : Editor {
 	private SerializedProperty agent;
 	private SerializedProperty player;
+
 	private SerializedProperty firstSectionTravelPoints;
 	private SerializedProperty secondSectionTravelPoints;
+
 	private SerializedProperty playerYLocationForSecondSection;
+
 	private SerializedProperty playerLayerMask;
 	private SerializedProperty rayCastOrigin;
+
 	private SerializedProperty immediateAwarenessRange;
 	private SerializedProperty sightRange;
 	private SerializedProperty horizontalFov;
+
 	private SerializedProperty monsterWalkingSpeed;
 	private SerializedProperty monsterRunningSpeed;
+	private SerializedProperty monsterSpeedRamp;
+	private SerializedProperty timeToFullSpeed;
+
 	private SerializedProperty monsterAttackDistance;
+
 	private SerializedProperty monsterAnimator;
 	private SerializedProperty killCamA;
+
 	private SerializedProperty debugSphereRadius;
+
 	private SerializedProperty seenPlayerCoffin;
 	private SerializedProperty coffinCheckDistance;
 	private SerializedProperty coffinLayerMask;
@@ -35,20 +45,31 @@ public class MonsterAIEditor : Editor {
 	private void OnEnable() {
 		agent = serializedObject.FindProperty("agent");
 		player = serializedObject.FindProperty("player");
+
 		firstSectionTravelPoints = serializedObject.FindProperty("firstSectionTravelPoints");
 		secondSectionTravelPoints = serializedObject.FindProperty("secondSectionTravelPoints");
+
 		playerYLocationForSecondSection = serializedObject.FindProperty("playerYLocationForSecondSection");
+
 		playerLayerMask = serializedObject.FindProperty("playerLayerMask");
 		rayCastOrigin = serializedObject.FindProperty("rayCastOrigin");
+
 		immediateAwarenessRange = serializedObject.FindProperty("immediateAwarenessRange");
 		sightRange = serializedObject.FindProperty("sightRange");
 		horizontalFov = serializedObject.FindProperty("horizontalFov");
+
 		monsterWalkingSpeed = serializedObject.FindProperty("monsterWalkingSpeed");
 		monsterRunningSpeed = serializedObject.FindProperty("monsterRunningSpeed");
+		monsterSpeedRamp = serializedObject.FindProperty("monsterSpeedRamp");
+		timeToFullSpeed = serializedObject.FindProperty("timeToFullSpeed");
+
 		monsterAttackDistance = serializedObject.FindProperty("monsterAttackDistance");
+
 		monsterAnimator = serializedObject.FindProperty("monsterAnimator");
 		killCamA = serializedObject.FindProperty("killCamA");
+
 		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
+
 		seenPlayerCoffin = serializedObject.FindProperty("playerSeenCoffin");
 		coffinCheckDistance = serializedObject.FindProperty("coffinCheckDistance");
 		coffinLayerMask = serializedObject.FindProperty("coffinLayerMask");
@@ -70,6 +91,8 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.LabelField("Monster Speed", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(monsterWalkingSpeed);
 		EditorGUILayout.PropertyField(monsterRunningSpeed);
+		EditorGUILayout.PropertyField(monsterSpeedRamp);
+		EditorGUILayout.PropertyField(timeToFullSpeed);
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Monster Animator", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(monsterAnimator);
