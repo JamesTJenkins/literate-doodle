@@ -99,7 +99,6 @@ public class MonsterAI : MonoBehaviour {
 			isRunning = false;
 
 			moveDuration = Mathf.Clamp(moveDuration - Time.fixedDeltaTime, 0, timeToFullSpeed);
-;
 			agent.speed = agent.speed > monsterRunningSpeed ? monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed) : monsterWalkingSpeed;
 			monsterAnimator.speed = agent.speed > monsterRunningSpeed ? agent.speed - Mathf.Sqrt(agent.speed) : monsterWalkingSpeed;
 		}
