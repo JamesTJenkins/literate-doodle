@@ -9,6 +9,8 @@ public class SettingsMenu : MonoBehaviour {
 	[Header("Game")]
 	[SerializeField] private Slider sensitivitySlider;
 	[SerializeField] private TMP_InputField sensitivityInput;
+	[SerializeField] private Toggle invertLookToggle;
+	[SerializeField] private Toggle crosshairToggle;
 	[Header("Video")]
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
 	[SerializeField] private TMP_Dropdown windowModeDropdown;
@@ -76,6 +78,8 @@ public class SettingsMenu : MonoBehaviour {
 		sensitivitySlider.value = pd.sensitivity;
 		sensitivityInput.text = pd.sensitivity.ToString();
 		prevValue = pd.sensitivity;
+		invertLookToggle.isOn = pd.invertLook;
+		crosshairToggle.isOn = pd.crosshair;
 
 		// Events
 		PlayerEvents.saveSettings += SaveGameSettings;
@@ -96,6 +100,8 @@ public class SettingsMenu : MonoBehaviour {
 		GameData pd = Save.GetData();
 		// Game
 		pd.UpdateSensitivity(sensitivitySlider.value);
+		pd.UpdateInvertLook(invertLookToggle.isOn);
+		pd.UpdateCrosshair(crosshairToggle.isOn);
 		// Video
 		Resolution res = resolutions[resolutionDropdown.value];
 		pd.UpdateVideoSettings(res.width, res.height, windowModeDropdown.value);
@@ -140,6 +146,14 @@ public class SettingsMenu : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	public void ToggleInvertLook(bool value) {
+		unsavedChanges = true;
+	}
+
+	public void ToggleCrosshair(bool value) {
+		unsavedChanges = true;
 	}
 
 	// Video settings 

@@ -8,6 +8,8 @@ using UnityEngine;
 public class GameData : ICloneable {
 	// Sensitivity
 	public float sensitivity;
+	public bool crosshair;
+	public bool invertLook;
 	// Video settings
 	public int windowMode;
 	public int resWidth;
@@ -39,6 +41,8 @@ public class GameData : ICloneable {
 		sfxVol = 0.5f;
 
 		sensitivity = 1f;
+		crosshair = true;
+		invertLook = false;
 	}
 
 	public void UpdateVideoSettings(int width, int height, int _windowMode) {
@@ -56,6 +60,16 @@ public class GameData : ICloneable {
 	public void UpdateSensitivity(float _sensitivity) {
 		sensitivity = _sensitivity;
 		PlayerEvents.OnUpdateSensitivity();
+	}
+
+	public void UpdateInvertLook(bool value) {
+		invertLook = value;
+		PlayerEvents.OnUpdateInvertLook();
+	}
+
+	public void UpdateCrosshair(bool value) {
+		crosshair = value;
+		PlayerEvents.OnUpdateCrosshair();
 	}
 
 	public object Clone() {

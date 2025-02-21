@@ -10,6 +10,8 @@ public static class PlayerEvents {
 	public static Action showQuestsStart;
 	public static Action showQuestsStopped;
 	public static Action updateSensitivity;
+	public static Action updateInvertLook;
+	public static Action updateCrosshair;
 	public static Action saveSettings;
 	public static Action escapeEnabled;
 	public static Action<string> displayHint;
@@ -50,6 +52,14 @@ public static class PlayerEvents {
 
 	public static void OnUpdateSensitivity() {
 		updateSensitivity?.Invoke();
+	}
+
+	public static void OnUpdateInvertLook() {
+		updateInvertLook?.Invoke();
+	}
+
+	public static void OnUpdateCrosshair() {
+		updateCrosshair?.Invoke();
 	}
 
 	public static void OnSaveSettings() {

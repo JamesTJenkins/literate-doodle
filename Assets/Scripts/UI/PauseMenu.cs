@@ -6,14 +6,20 @@ public class PauseMenu : MonoBehaviour {
 	[SerializeField] private GameObject settings;
 	[SerializeField] private GameObject crosshair;
 
+	private bool crosshairState;
+
 	private void Start() {
 		PlayerEvents.togglePauseMenu += TogglePauseMenu;
 		PlayerEvents.forceClosePauseMenu += ForceClosePauseMenu;
+		PlayerEvents.updateCrosshair += UpdateCrosshair;
+
+		UpdateCrosshair();
 	}
 
 	private void OnDestroy() {
 		PlayerEvents.togglePauseMenu -= TogglePauseMenu;
 		PlayerEvents.forceClosePauseMenu -= ForceClosePauseMenu;
+		PlayerEvents.updateCrosshair -= UpdateCrosshair;
 	}
 
 	public void Restart() {
@@ -33,7 +39,7 @@ public class PauseMenu : MonoBehaviour {
 		pauseMenu.SetActive(!pauseMenu.activeSelf);
 		Cursor.lockState = pauseMenu.activeSelf ? CursorLockMode.None : CursorLockMode.Confined;
 		Cursor.visible = pauseMenu.activeSelf;
-		crosshair.SetActive(!pauseMenu.activeSelf);
+		crosshair.SetActive(crosshairState ? !pauseMenu.activeSelf : false);
 		PlayerEvents.OnTogglePlayerInput(!pauseMenu.activeSelf);
 
 		if (settings.activeSelf) {
@@ -44,8 +50,16 @@ public class PauseMenu : MonoBehaviour {
 
 	private void ForceClosePauseMenu() {
 		pauseMenu.SetActive(false);
+		crosshair.SetActive(crosshairState ? !pauseMenu.activeSelf : false);
 		Cursor.lockState = CursorLockMode.Confined;
 		Cursor.visible = false;
 		PlayerEvents.OnTogglePlayerInput(true);
+	}
+
+	private void UpdateCrosshair() {
+		crosshairState = Save.GetData().crosshair;
+
+		if (!pauseMenu.activeSelf)
+			crosshair.SetActive(crosshairState);
 	}
 }
