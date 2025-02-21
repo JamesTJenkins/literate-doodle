@@ -58,6 +58,7 @@ public class PlayerController : MonoBehaviour {
 
 		UpdateSensitivity();
 		PlayerEvents.updateSensitivity += UpdateSensitivity;
+		PlayerEvents.updateInvertLook += UpdateInvertLook;
 		PlayerEvents.togglePlayerInput += TogglePlayerInput;
 		PlayerEvents.toggleUIInput += ToggleUIInput;
 		PlayerEvents.escapeEnabled += OnEscapeEnabled;
@@ -75,6 +76,7 @@ public class PlayerController : MonoBehaviour {
 		userInput.Dispose();
 
 		PlayerEvents.updateSensitivity -= UpdateSensitivity;
+		PlayerEvents.updateInvertLook -= UpdateInvertLook;
 		PlayerEvents.togglePlayerInput -= TogglePlayerInput;
 		PlayerEvents.toggleUIInput -= ToggleUIInput;
 		PlayerEvents.escapeEnabled -= OnEscapeEnabled;
@@ -203,6 +205,10 @@ public class PlayerController : MonoBehaviour {
 
 	private void UpdateSensitivity() {
 		sensitivity = Save.GetData().sensitivity;
+	}
+
+	private void UpdateInvertLook() {
+		invertLook = Save.GetData().invertLook;
 	}
 
 	private void Looking(Vector2 axisInput) {
