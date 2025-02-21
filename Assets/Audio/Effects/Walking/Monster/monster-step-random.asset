@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-5309136003492799568
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (1)_{-5309136003492799568}
+  m_AudioClip: {fileID: 8300000, guid: 0843104359b5cae4cbd2b6580ddfd9fb, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-1490989500821577847
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (3)_{-1490989500821577847}
+  m_AudioClip: {fileID: 8300000, guid: 371f929ca4f44d749bbb9bed42a29723, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-1468681936823348607
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (4)_{-1468681936823348607}
+  m_AudioClip: {fileID: 8300000, guid: 446454c44e1a1fa4f988eaf685d4cfe9, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &-241941416844711920
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (2)_{-241941416844711920}
+  m_AudioClip: {fileID: 8300000, guid: 807df361707adcc44baa0ba520d38270, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &841729828731733782
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (6)_{841729828731733782}
+  m_AudioClip: {fileID: 8300000, guid: 2dd47943baef27345939ff917d0c1725, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &2615576385621242680
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (7)_{2615576385621242680}
+  m_AudioClip: {fileID: 8300000, guid: cbd6751868529584caee8c024a6d1884, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &4645574532557793879
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-walking (5)_{4645574532557793879}
+  m_AudioClip: {fileID: 8300000, guid: b3cb694ad16e4914e86205491d83e57a, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: monster-step-random
+  m_Volume: 0
+  m_Pitch: -572
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: 0, y: 0}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: -5309136003492799568}
+  - {fileID: -241941416844711920}
+  - {fileID: -1490989500821577847}
+  - {fileID: -1468681936823348607}
+  - {fileID: 4645574532557793879}
+  - {fileID: 841729828731733782}
+  - {fileID: 2615576385621242680}
+  m_AvoidRepeatingLast: 0
+  m_PlaybackMode: 1
+  m_TriggerMode: 0
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 2
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 0
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
