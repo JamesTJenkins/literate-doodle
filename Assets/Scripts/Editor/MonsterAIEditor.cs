@@ -32,10 +32,11 @@ public class MonsterAIEditor : Editor {
 
 	private SerializedProperty debugSphereRadius;
 
-	private SerializedProperty seenPlayerCoffin;
 	private SerializedProperty coffinCheckDistance;
 	private SerializedProperty coffinLayerMask;
 	private SerializedProperty coffinCheckChancePercentage;
+
+	private SerializedProperty timeToLoseSight;
 
 	private (string, int) selectedPointIndex = (string.Empty, -1);
 
@@ -76,10 +77,11 @@ public class MonsterAIEditor : Editor {
 
 		debugSphereRadius = serializedObject.FindProperty("debugSphereRadius");
 
-		seenPlayerCoffin = serializedObject.FindProperty("playerSeenCoffin");
 		coffinCheckDistance = serializedObject.FindProperty("coffinCheckDistance");
 		coffinLayerMask = serializedObject.FindProperty("coffinLayerMask");
 		coffinCheckChancePercentage = serializedObject.FindProperty("coffinCheckChancePercentage");
+
+		timeToLoseSight = serializedObject.FindProperty("timeToLoseSight");
 	}
 
 	public override void OnInspectorGUI() {
@@ -88,6 +90,7 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.LabelField("Raycasting Options", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(agent);
 		EditorGUILayout.PropertyField(player);
+		EditorGUILayout.PropertyField(timeToLoseSight);
 		EditorGUILayout.PropertyField(playerLayerMask);
 		EditorGUILayout.PropertyField(rayCastOrigin);
 		EditorGUILayout.PropertyField(immediateAwarenessRange);
@@ -107,9 +110,6 @@ public class MonsterAIEditor : Editor {
 		EditorGUILayout.PropertyField(monsterAttackDistance);
 		EditorGUILayout.LabelField("Kill Cameras", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(killCamA);
-		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Player Sighting", EditorStyles.boldLabel);
-		EditorGUILayout.PropertyField(seenPlayerCoffin);
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Coffin Check", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(coffinCheckDistance);

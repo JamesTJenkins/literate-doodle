@@ -13,6 +13,7 @@ public class MonsterAI : MonoBehaviour {
 	public float playerYLocationForThirdSection;
 
 	public LayerMask playerLayerMask;
+	public float timeToLoseSight;
 	public Vector3 lastKnownPlayerPosition;
 	public GameObject rayCastOrigin;
 	public float immediateAwarenessRange;
@@ -34,7 +35,6 @@ public class MonsterAI : MonoBehaviour {
 
 	public Camera killCamA;
 
-	public bool playerSeenCoffin;
 	public bool canSee;
 	public bool checkLastKnown = false;
 	public float coffinCheckChancePercentage;
@@ -49,6 +49,8 @@ public class MonsterAI : MonoBehaviour {
 	private HashSet<int> firstSectionInvalidPointIndexes = new();
 	private HashSet<int> secondSectionInvalidPointIndexes = new();
 	private HashSet<int> thirdSectionInvalidPointIndexes = new();
+
+	private float lostSightTime;
 
 #if UNITY_EDITOR
 	public float debugSphereRadius;
@@ -85,7 +87,6 @@ public class MonsterAI : MonoBehaviour {
 		monsterAnimator.SetFloat(Consts.Anims.SPEED, agent.velocity.magnitude);
 		transform.rotation = Quaternion.LookRotation(agent.velocity, Vector3.up);
 
-		playerSeenCoffin = player.hidden && canSee;
 		canSee = CanSeePlayer();
 
 		if (canSee) {
@@ -93,16 +94,30 @@ public class MonsterAI : MonoBehaviour {
 			agent.destination = lastKnownPlayerPosition;
 			checkLastKnown = true;
 			isRunning = true;
+			lostSightTime = timeToLoseSight;
 
 			moveDuration = Mathf.Clamp(moveDuration + Time.fixedDeltaTime, 0, timeToFullSpeed);
 			agent.speed = monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed);
 			monsterAnimator.speed = agent.speed - Mathf.Sqrt(agent.speed);
 		} else {
-			isRunning = false;
+			if (checkLastKnown) {
+				if (lostSightTime > 0f) {
+					lostSightTime -= Time.fixedDeltaTime;
+					lastKnownPlayerPosition = player.transform.position;
+					agent.destination = lastKnownPlayerPosition;
+				}
 
-			moveDuration = Mathf.Clamp(moveDuration - Time.fixedDeltaTime, 0, timeToFullSpeed);
-			agent.speed = agent.speed > monsterRunningSpeed ? monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed) : monsterWalkingSpeed;
-			monsterAnimator.speed = agent.speed > monsterRunningSpeed ? agent.speed - Mathf.Sqrt(agent.speed) : monsterWalkingSpeed;
+				if (agent.remainingDistance < agent.stoppingDistance) {
+					SelectCoffinToCheck();
+					checkLastKnown = false;
+				}
+			} else {
+				isRunning = false;
+
+				moveDuration = Mathf.Clamp(moveDuration - Time.fixedDeltaTime, 0, timeToFullSpeed);
+				agent.speed = agent.speed > monsterRunningSpeed ? monsterSpeedRamp.Evaluate(moveDuration / timeToFullSpeed) : monsterWalkingSpeed;
+				monsterAnimator.speed = agent.speed > monsterRunningSpeed ? agent.speed - Mathf.Sqrt(agent.speed) : monsterWalkingSpeed;
+			}
 		}
 
 		if (agent.remainingDistance <= agent.stoppingDistance && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance + 2.5f && checkingCoffin) {
@@ -112,11 +127,6 @@ public class MonsterAI : MonoBehaviour {
 		if (agent.remainingDistance <= agent.stoppingDistance) {
 			SetNewPatrolPoint();
 			checkingCoffin = false;
-		}
-
-		if (checkLastKnown && !canSee && agent.remainingDistance < agent.stoppingDistance) {
-			SelectCoffinToCheck();
-			checkLastKnown = false;
 		}
 
 		if (canSee && Vector3.Distance(player.transform.position, transform.position) <= monsterAttackDistance) {
