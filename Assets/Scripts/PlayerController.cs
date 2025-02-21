@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +10,7 @@ public class PlayerController : MonoBehaviour {
 	public InputSystem_Actions userInput;
 	public Camera playerCamera;
 	public Interactable lastInteracted;
+	public AudioSource playerWalkingSoundSource;
 
 	[Header("Interact")]
 	[SerializeField] private float interactDistance = 5f;
@@ -44,6 +47,11 @@ public class PlayerController : MonoBehaviour {
 
 	private GameObject prevHit;
 	private bool escapeEnabled = false;
+
+	[Header("Sound")]
+	private bool soundQueued = false;
+	public float walkingSoundDelay;
+	public float sprintingSoundDelay;
 
 	private void Start() {
 		userInput = new InputSystem_Actions();
@@ -93,6 +101,7 @@ public class PlayerController : MonoBehaviour {
 
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
 		Sprinting(userInput.Player.Sprint.IsPressed());
+		PlayStepSound();
 
 		if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit newHit, interactDistance, interactLayers, QueryTriggerInteraction.Ignore)) {
 			Interactable interact = newHit.collider.gameObject.GetComponent<Interactable>();
@@ -107,6 +116,20 @@ public class PlayerController : MonoBehaviour {
 				PlayerEvents.OnDisplayHint(string.Empty);
 			}
 		}
+	}
+
+	private void PlayStepSound() {
+		if (userInput.Player.Move.ReadValue<Vector2>() != Vector2.zero && soundQueued == false) {
+			soundQueued = true;
+			StartCoroutine(PlaySound());
+		}
+	}
+
+	private IEnumerator PlaySound() {
+		yield return new WaitForSeconds(isSprinting ? sprintingSoundDelay : walkingSoundDelay);
+		soundQueued = false;
+		playerWalkingSoundSource.Play();
+		yield return null;
 	}
 
 	private void OnPause(InputAction.CallbackContext context) {
