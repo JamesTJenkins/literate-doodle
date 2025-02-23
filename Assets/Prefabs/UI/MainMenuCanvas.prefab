@@ -1121,8 +1121,8 @@ MonoBehaviour:
   windowModeDropdown: {fileID: 6720883457231641449}
   mixer: {fileID: 24100000, guid: ead2b68696f9e8d418e667c2696c8be9, type: 2}
   masterSlider: {fileID: 4622034008744328288}
-  musicSlider: {fileID: 2106750804759902445}
-  sfxSlider: {fileID: 8371523286798952883}
+  musicSlider: {fileID: 8371523286798952883}
+  sfxSlider: {fileID: 2106750804759902445}
 --- !u!1001 &7488132720669455841
 PrefabInstance:
   m_ObjectHideFlags: 0

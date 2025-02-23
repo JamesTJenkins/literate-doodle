@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,10 @@ public class PlayerController : MonoBehaviour {
 	public InputSystem_Actions userInput;
 	public Camera playerCamera;
 	public Interactable lastInteracted;
+	public AudioSource playerWalkingSoundSource;
+	public AudioSource playerKeyPickupSource;
+	public AudioSource PlayerCoffinInteractSource;
+	public AudioSource PlayerEscapeSource;
 
 	[Header("Interact")]
 	[SerializeField] private float interactDistance = 5f;
@@ -44,6 +49,11 @@ public class PlayerController : MonoBehaviour {
 
 	private GameObject prevHit;
 	private bool escapeEnabled = false;
+
+	[Header("Sound")]
+	private bool soundQueued = false;
+	public float walkingSoundDelay;
+	public float sprintingSoundDelay;
 
 	private void Start() {
 		userInput = new InputSystem_Actions();
@@ -95,6 +105,7 @@ public class PlayerController : MonoBehaviour {
 
 		Moving(userInput.Player.Move.ReadValue<Vector2>());
 		Sprinting(userInput.Player.Sprint.IsPressed());
+		PlayStepSound();
 
 		if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit newHit, interactDistance, interactLayers, QueryTriggerInteraction.Ignore)) {
 			Interactable interact = newHit.collider.gameObject.GetComponent<Interactable>();
@@ -109,6 +120,20 @@ public class PlayerController : MonoBehaviour {
 				PlayerEvents.OnDisplayHint(string.Empty);
 			}
 		}
+	}
+
+	private void PlayStepSound() {
+		if (userInput.Player.Move.ReadValue<Vector2>() != Vector2.zero && soundQueued == false) {
+			soundQueued = true;
+			StartCoroutine(PlayWalkSound());
+		}
+	}
+
+	private IEnumerator PlayWalkSound() {
+		yield return new WaitForSeconds(isSprinting ? sprintingSoundDelay : walkingSoundDelay);
+		soundQueued = false;
+		playerWalkingSoundSource.Play();
+		yield return null;
 	}
 
 	private void OnPause(InputAction.CallbackContext context) {
@@ -152,10 +177,12 @@ public class PlayerController : MonoBehaviour {
 		case InteractType.Key:
 			prevHit.SetActive(false);
 			doorKeys.Add(interactable.doorCode);
+			playerKeyPickupSource.Play();
 			break;
 		case InteractType.Switch:
 			prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.ON);
 			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
+			interactable.gameObject.GetComponentInChildren<AudioSource>().Play();
 			ClearInteract(interactable);
 			PlayerEvents.OnResetMonsterInvalidPoints();
 			break;
@@ -165,11 +192,13 @@ public class PlayerController : MonoBehaviour {
 				prevHit.transform.position -= interactable.inCoffinOffset;
 				interactable.coffinCam.gameObject.SetActive(false);
 				playerCamera.gameObject.SetActive(true);
+				PlayerCoffinInteractSource.Play();
 			} else {
 				hidden = true;
 				prevHit.transform.position += interactable.inCoffinOffset;
 				playerCamera.gameObject.SetActive(false);
 				interactable.coffinCam.gameObject.SetActive(true);
+				PlayerCoffinInteractSource.Play();
 			}
 			break;
 		case InteractType.Escape:
@@ -178,6 +207,7 @@ public class PlayerController : MonoBehaviour {
 				ToggleUIInput(false);
 				PlayerEvents.OnToggleEscapeMenu();
 				PlayerEvents.OnDisplayHint(string.Empty);
+				PlayerEscapeSource.Play();
 			} else {
 				PlayerEvents.OnDisplayHint(Consts.Hints.CANT_ESCAPE_YET);
 			}

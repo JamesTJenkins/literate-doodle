@@ -199,11 +199,10 @@ public class MonsterAI : MonoBehaviour {
 		PlayerEvents.OnTogglePlayerInput(false);
 		PlayerEvents.OnToggleUIInput(false);
 		monsterAnimator.SetTrigger("Kill");
-		if (!player.playerCamera.gameObject.activeSelf && player.lastInteracted.interactType == InteractType.Coffin) {
+		if (player.lastInteracted != null && player.lastInteracted.interactType == InteractType.Coffin) {
 			player.lastInteracted.coffinCam.gameObject.SetActive(false);
-		} else {
-			player.GetComponentInChildren<Camera>().gameObject.SetActive(false);
 		}
+		player.playerCamera.gameObject.SetActive(false);
 		killCamA.gameObject.SetActive(true);
 	}
 
