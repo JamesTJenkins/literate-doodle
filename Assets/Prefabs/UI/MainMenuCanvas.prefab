@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2780105396376904331}
   - component: {fileID: 7960755505934142962}
   m_Layer: 5
-  m_Name: LiterateDoodle
+  m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 300, y: 350}
+  m_AnchoredPosition: {x: 345, y: 350}
   m_SizeDelta: {x: 600, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2780105396376904331
@@ -65,9 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Literate-Doodle
-
-'
+  m_text: Crimsion Catacombs
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 662273c0c9385104d9f5366eea59aef3, type: 2}
   m_sharedMaterial: {fileID: 7734254682936199067, guid: 662273c0c9385104d9f5366eea59aef3, type: 2}
@@ -1119,7 +1117,6 @@ MonoBehaviour:
   sensitivityInput: {fileID: 2589937341625347340}
   invertLookToggle: {fileID: 3384783504584412367}
   crosshairToggle: {fileID: 8364367642193736717}
-  crosshair: {fileID: 0}
   resolutionDropdown: {fileID: 1781004166046741421}
   windowModeDropdown: {fileID: 6720883457231641449}
   mixer: {fileID: 24100000, guid: ead2b68696f9e8d418e667c2696c8be9, type: 2}
