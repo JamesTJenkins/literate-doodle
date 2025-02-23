@@ -448,7 +448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a81bcacc415a1f743bfdf703afc52027, type: 3}
   m_Name: GradientSky
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   rotation:
     m_OverrideState: 1
     m_Value: 0
@@ -747,7 +747,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9e4ed5a6f56fb4ebd693e39684f36f, type: 3}
   m_Name: VolumetricClouds
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -1608,7 +1608,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e88178bb13f64a54f90d6cd6ef7aa9a1, type: 3}
   m_Name: CloudLayer
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   opacity:
     m_OverrideState: 1
     m_Value: 1
@@ -1620,7 +1620,7 @@ MonoBehaviour:
     m_Value: 0
   resolution:
     m_OverrideState: 1
-    m_Value: 256
+    m_Value: 1024
   shadowMultiplier:
     m_OverrideState: 1
     m_Value: 1
@@ -1629,7 +1629,7 @@ MonoBehaviour:
     m_Value: {r: 0, g: 0, b: 0, a: 1}
   shadowResolution:
     m_OverrideState: 1
-    m_Value: 64
+    m_Value: 256
   shadowSize:
     m_OverrideState: 1
     m_Value: 500
@@ -1787,7 +1787,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a76fd08475e21554b8f284f723dd7cf8, type: 3}
   m_Name: WaterRendering
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enable:
     m_OverrideState: 1
     m_Value: 0
@@ -1960,7 +1960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d877ec3e844f2ca46830012e8e79319b, type: 3}
   m_Name: PhysicallyBasedSky
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   rotation:
     m_OverrideState: 1
     m_Value: 0
@@ -1996,7 +1996,7 @@ MonoBehaviour:
     m_Value: 1
   atmosphericScattering:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 1
   renderingMode:
     m_OverrideState: 1
     m_Value: 0
@@ -2220,7 +2220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf384b154398e341b6b29969c078198, type: 3}
   m_Name: MotionBlur
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   quality:
     m_OverrideState: 1
     m_Value: 1
@@ -2457,7 +2457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59b6606ef2548734bb6d11b9d160bc7e, type: 3}
   m_Name: HDRISky
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   rotation:
     m_OverrideState: 1
     m_Value: 0
