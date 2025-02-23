@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour {
 	public Camera playerCamera;
 	public Interactable lastInteracted;
 	public AudioSource playerWalkingSoundSource;
+	public AudioSource playerKeyPickupSource;
+	public AudioSource PlayerCoffinInteractSource;
+	public AudioSource PlayerEscapeSource;
 
 	[Header("Interact")]
 	[SerializeField] private float interactDistance = 5f;
@@ -121,11 +124,11 @@ public class PlayerController : MonoBehaviour {
 	private void PlayStepSound() {
 		if (userInput.Player.Move.ReadValue<Vector2>() != Vector2.zero && soundQueued == false) {
 			soundQueued = true;
-			StartCoroutine(PlaySound());
+			StartCoroutine(PlayWalkSound());
 		}
 	}
 
-	private IEnumerator PlaySound() {
+	private IEnumerator PlayWalkSound() {
 		yield return new WaitForSeconds(isSprinting ? sprintingSoundDelay : walkingSoundDelay);
 		soundQueued = false;
 		playerWalkingSoundSource.Play();
@@ -173,10 +176,12 @@ public class PlayerController : MonoBehaviour {
 		case InteractType.Key:
 			prevHit.SetActive(false);
 			doorKeys.Add(interactable.doorCode);
+			playerKeyPickupSource.Play();
 			break;
 		case InteractType.Switch:
 			prevHit.GetComponent<Animator>().SetTrigger(Consts.Anims.ON);
 			interactable.doorToToggle.GetComponent<Animator>().SetTrigger(Consts.Anims.OPEN);
+			interactable.gameObject.GetComponentInChildren<AudioSource>().Play();
 			ClearInteract(interactable);
 			PlayerEvents.OnResetMonsterInvalidPoints();
 			break;
@@ -186,11 +191,13 @@ public class PlayerController : MonoBehaviour {
 				prevHit.transform.position -= interactable.inCoffinOffset;
 				interactable.coffinCam.gameObject.SetActive(false);
 				playerCamera.gameObject.SetActive(true);
+				PlayerCoffinInteractSource.Play();
 			} else {
 				hidden = true;
 				prevHit.transform.position += interactable.inCoffinOffset;
 				playerCamera.gameObject.SetActive(false);
 				interactable.coffinCam.gameObject.SetActive(true);
+				PlayerCoffinInteractSource.Play();
 			}
 			break;
 		case InteractType.Escape:
@@ -199,6 +206,7 @@ public class PlayerController : MonoBehaviour {
 				ToggleUIInput(false);
 				PlayerEvents.OnToggleEscapeMenu();
 				PlayerEvents.OnDisplayHint(string.Empty);
+				PlayerEscapeSource.Play();
 			} else {
 				PlayerEvents.OnDisplayHint(Consts.Hints.CANT_ESCAPE_YET);
 			}
