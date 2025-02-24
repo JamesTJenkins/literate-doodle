@@ -14,6 +14,7 @@ public class GameData : ICloneable {
 	public int windowMode;
 	public int resWidth;
 	public int resHeight;
+	public bool vsync;
 	// Audio settings
 	public float masterVol;
 	public float musicVol;
@@ -35,6 +36,7 @@ public class GameData : ICloneable {
 		Resolution res = Screen.currentResolution;
 		resWidth = res.width;
 		resHeight = res.height;
+		vsync = true;
 
 		masterVol = 0.5f;
 		musicVol = 0.5f;
@@ -45,10 +47,11 @@ public class GameData : ICloneable {
 		invertLook = false;
 	}
 
-	public void UpdateVideoSettings(int width, int height, int _windowMode) {
+	public void UpdateVideoSettings(int width, int height, int _windowMode, bool _vsync) {
 		windowMode = _windowMode;
 		resWidth = width;
 		resHeight = height;
+		vsync = _vsync;
 	}
 
 	public void UpdateAudioSettings(float _masterVol, float _musicVol, float _sfxVol) {

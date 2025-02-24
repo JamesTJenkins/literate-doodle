@@ -14,6 +14,7 @@ public class SettingsMenu : MonoBehaviour {
 	[Header("Video")]
 	[SerializeField] private TMP_Dropdown resolutionDropdown;
 	[SerializeField] private TMP_Dropdown windowModeDropdown;
+	[SerializeField] private Toggle vsync;
 	[Header("Audio")]
 	[SerializeField] private AudioMixer mixer;
 	[SerializeField] private Slider masterSlider;
@@ -74,6 +75,8 @@ public class SettingsMenu : MonoBehaviour {
 
 		// Get player data
 		GameData pd = Save.GetData();
+		vsync.isOn = pd.vsync;
+		SetVsync();
 		InitalizeAudio(pd.masterVol, pd.musicVol, pd.sfxVol);
 		sensitivitySlider.value = pd.sensitivity;
 		sensitivityInput.text = pd.sensitivity.ToString();
@@ -104,7 +107,7 @@ public class SettingsMenu : MonoBehaviour {
 		pd.UpdateCrosshair(crosshairToggle.isOn);
 		// Video
 		Resolution res = resolutions[resolutionDropdown.value];
-		pd.UpdateVideoSettings(res.width, res.height, windowModeDropdown.value);
+		pd.UpdateVideoSettings(res.width, res.height, windowModeDropdown.value, vsync.isOn);
 		// Audio
 		pd.UpdateAudioSettings(masterSlider.value, musicSlider.value, sfxSlider.value);
 
@@ -177,6 +180,12 @@ public class SettingsMenu : MonoBehaviour {
 				break;
 		}
 
+		unsavedChanges = true;
+	}
+
+	public void SetVsync() {
+		QualitySettings.vSyncCount = vsync.isOn ? 1 : 0;
+		Debug.Log(vsync.isOn);
 		unsavedChanges = true;
 	}
 

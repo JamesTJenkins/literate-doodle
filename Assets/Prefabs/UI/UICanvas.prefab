@@ -355,9 +355,9 @@ MonoBehaviour:
   sensitivityInput: {fileID: 2330230954210757853}
   invertLookToggle: {fileID: 3269261849347501342}
   crosshairToggle: {fileID: 8625482847877699036}
-  crosshair: {fileID: 1512459702776848130}
   resolutionDropdown: {fileID: 1950216027677119100}
   windowModeDropdown: {fileID: 6837226315852315320}
+  vsync: {fileID: 7489909762793186242}
   mixer: {fileID: 24100000, guid: ead2b68696f9e8d418e667c2696c8be9, type: 2}
   masterSlider: {fileID: 4864777719176093105}
   musicSlider: {fileID: 8613779621530093666}
@@ -559,6 +559,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: PauseMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 8065288236444235539}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetVsync
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SettingsMenu, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 8635535213364188483, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -684,6 +712,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b743370ac3e4ec2a1668f5455a8ef8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7489909762793186242 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7470449602881879779, guid: 89a2ddeb900a3184aa6cb3b4c8dc73b9, type: 3}
+  m_PrefabInstance: {fileID: 26422826026130721}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &8613779621530093666 stripped
