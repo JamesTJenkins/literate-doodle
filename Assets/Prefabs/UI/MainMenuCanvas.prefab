@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Crimsion Catacombs
+  m_text: Crimson Catacombs
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 662273c0c9385104d9f5366eea59aef3, type: 2}
   m_sharedMaterial: {fileID: 7734254682936199067, guid: 662273c0c9385104d9f5366eea59aef3, type: 2}
