@@ -5,6 +5,8 @@ Crimson Catacombs
 </h1>
 <p align="center">
 Crimson Catacombs is a small horror game made with Unity 6 where the player is searching for the Book of Death by doing a series of puzzles to get deeper into the crypt while avoiding its feared crypt keeper. 
+
+The full game can be downloaded here: https://undeadkudos.itch.io/crimson-catacombs
 </p>
 <h2>
 Why project called 'literate-doodle'?
