@@ -18,7 +18,7 @@ MonoBehaviour:
     supportSSRTransparent: 0
     supportSSAO: 1
     supportSSGI: 0
-    supportSubsurfaceScattering: 1
+    supportSubsurfaceScattering: 0
     sssSampleBudget:
       m_Values: 140000002800000050000000
       m_SchemaId:
@@ -53,7 +53,7 @@ MonoBehaviour:
     customBufferFormat: 8
     supportedLitShaderMode: 2
     planarReflectionResolution:
-      m_Values: 000100000004000000080000
+      m_Values: 000100000004000000040000
       m_SchemaId:
         m_Id: With3Levels
     cubeReflectionResolution:
@@ -76,7 +76,7 @@ MonoBehaviour:
     lightProbeSystem: 1
     oldLightProbeSystem: 0
     probeVolumeMemoryBudget: 1024
-    supportProbeVolumeGPUStreaming: 0
+    supportProbeVolumeGPUStreaming: 1
     supportProbeVolumeDiskStreaming: 0
     probeVolumeSHBands: 1
     supportProbeVolumeScenarios: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
     probeVolumeBlendingMemoryBudget: 128
     supportRayTracing: 1
     supportVFXRayTracing: 0
-    supportedRayTracingMode: 3
+    supportedRayTracingMode: 1
     lightLoopSettings:
       cookieAtlasSize: 2048
       cookieFormat: 74
@@ -96,7 +96,7 @@ MonoBehaviour:
       maxEnvLightsOnScreen: 0
       reflectionCacheCompressed: 0
       reflectionProbeFormat: 74
-      reflectionProbeTexCacheSize: 4096
+      reflectionProbeTexCacheSize: 1024
       reflectionProbeTexLastValidCubeMip: 3
       reflectionProbeTexLastValidPlanarMip: 0
       reflectionProbeDecreaseResToFit: 1
@@ -111,13 +111,13 @@ MonoBehaviour:
       maxCubeReflectionOnScreen: 32
       maxPlanarReflectionOnScreen: 8
       maxDecalsOnScreen: 512
-      maxLightsPerClusterCell: 8
+      maxLightsPerClusterCell: 16
       maxLocalVolumetricFogSize: 0
       maxLocalVolumetricFogOnScreen: 256
     hdShadowInitParams:
       maxShadowRequests: 128
       directionalShadowsDepthBits: 32
-      punctualShadowFilteringQuality: 1
+      punctualShadowFilteringQuality: 2
       directionalShadowFilteringQuality: 1
       areaShadowFilteringQuality: 0
       punctualLightShadowAtlas:
@@ -146,7 +146,7 @@ MonoBehaviour:
       maxDirectionalShadowMapResolution: 2048
       maxPunctualShadowMapResolution: 2048
       maxAreaShadowMapResolution: 2048
-      supportScreenSpaceShadows: 0
+      supportScreenSpaceShadows: 1
       maxScreenSpaceShadowSlots: 4
       screenSpaceShadowBufferFormat: 48
     decalSettings:
