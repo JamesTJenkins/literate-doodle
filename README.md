@@ -1,10 +1,10 @@
 ![banner](https://github.com/user-attachments/assets/07361dfc-f94a-4df3-9f0c-8f2574677ef6)
 
 <h1 align="center">
-Crimsion Catacombs
+Crimson Catacombs
 </h1>
 <p align="center">
-Crimsion Catacombs is a small horror game made with Unity 6 where the player is searching for the Book of Death by doing a series of puzzles to get deeper into the crypt while avoiding its feared crypt keeper. 
+Crimson Catacombs is a small horror game made with Unity 6 where the player is searching for the Book of Death by doing a series of puzzles to get deeper into the crypt while avoiding its feared crypt keeper. 
 </p>
 <h2>
 Why project called 'literate-doodle'?
