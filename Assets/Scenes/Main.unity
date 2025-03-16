@@ -20371,7 +20371,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4204986206687800619, guid: 643992a490d30b8488f582f568e53495, type: 3}
       propertyPath: itemName
-      value: Lower Chamber Key
+      value: Lower Chamber A Key
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
