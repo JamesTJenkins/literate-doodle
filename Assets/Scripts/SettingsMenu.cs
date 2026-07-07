@@ -185,7 +185,6 @@ public class SettingsMenu : MonoBehaviour {
 
 	public void SetVsync() {
 		QualitySettings.vSyncCount = vsync.isOn ? 1 : 0;
-		Debug.Log(vsync.isOn);
 		unsavedChanges = true;
 	}
 

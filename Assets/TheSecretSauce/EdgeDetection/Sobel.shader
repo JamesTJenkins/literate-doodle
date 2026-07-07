@@ -30,6 +30,24 @@ Shader "Hidden/Shader/Sobel"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/PostProcessing/Shaders/RTUpscale.hlsl"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Material/NormalBuffer.hlsl"
 
+    TEXTURE2D_X(_MainTex);
+
+    CBUFFER_START(UnityPerMaterial)
+    float _OutlineIntensity;
+    float _OutlineThickness;
+    float4 _OutlineColor;
+    float _DepthMultiplier;
+    float _DepthBias;
+    float _NormalMultiplier;
+    float _NormalBias;
+    float _MaxRange;
+    float _DistanceFalloffPower;
+    CBUFFER_END
+
+    // These arent set per material and Sobel.cs manages them
+    float _LuminanceMultiplier;
+    float _LuminanceBias;
+
     struct Attributes
     {
         uint vertexID : SV_VertexID;
@@ -52,20 +70,6 @@ Shader "Hidden/Shader/Sobel"
         output.texcoord = GetFullScreenTriangleTexCoord(input.vertexID);
         return output;
     }
-
-    // List of properties to control your post process effect
-    float _OutlineIntensity;
-    float _OutlineThickness;
-    float4 _OutlineColor;
-    float _DepthMultiplier;
-    float _DepthBias;
-    float _NormalMultiplier;
-    float _NormalBias;
-    float _LuminanceMultiplier;
-    float _LuminanceBias;
-    float _MaxRange;
-    float _DistanceFalloffPower;
-    TEXTURE2D_X(_MainTex);
 
     // Original sobel
     float SobelBasic(float topLeft, float top, float topRight, float left, float right, float botLeft, float bot, float botRight) {
@@ -170,8 +174,7 @@ Shader "Hidden/Shader/Sobel"
         return 1.0 / (_ZBufferParams.x * depth + _ZBufferParams.y);
     }
 
-    float4 CustomPostProcess(Varyings input) : SV_Target
-    {
+    float4 CustomPostProcess(Varyings input) : SV_Target {
         UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
 
         float3 sourceColor = SAMPLE_TEXTURE2D_X(_MainTex, s_linear_clamp_sampler, ClampAndScaleUVForBilinearPostProcessTexture(input.texcoord)).xyz;
@@ -181,15 +184,15 @@ Shader "Hidden/Shader/Sobel"
         float offsetV = _OutlineThickness / _ScreenSize.y;
 
         float sobelDepth = SobelSampleDepth(input.texcoord.xy, offsetU, offsetV);
-        sobelDepth = pow(abs(saturate(sobelDepth)) * _DepthMultiplier, _DepthBias);
+        sobelDepth = pow(abs(saturate(sobelDepth) * _DepthMultiplier), _DepthBias);
 
         // Sobel normal sampling
         float sobelNormal = SobelSampleNormal(input.texcoord.xy, offsetU, offsetV);
-        sobelNormal = pow(abs(saturate(sobelNormal)) * _NormalMultiplier, _NormalBias);
+        sobelNormal = pow(abs(saturate(sobelNormal) * _NormalMultiplier), _NormalBias);
 
         // Sobel luminance sampling
         float sobelLuminance = SobelSampleLuminance(input.texcoord.xy, offsetU, offsetV);
-        sobelLuminance = pow(abs(saturate(sobelLuminance)) * _LuminanceMultiplier, _LuminanceBias);
+        sobelLuminance = pow(abs(saturate(sobelLuminance) * _LuminanceMultiplier), _LuminanceBias);
 
         // Dictate Intensity combining all 3
         float outlineIntensity = max(sobelDepth, max(sobelNormal, sobelLuminance));
@@ -206,7 +209,7 @@ Shader "Hidden/Shader/Sobel"
 
         // Calculate distance falloff
         float depth = _ProjectionParams.z * LinearEyeDepth(SampleCameraDepth(input.texcoord));
-        float distanceFalloff = saturate(pow(_MaxRange / depth, _DistanceFalloffPower));
+        float distanceFalloff = saturate(pow(max(_MaxRange / depth, 0.0), _DistanceFalloffPower));
 
         // Apply sobel effect
         float3 color = lerp(sourceColor.rgb, _OutlineColor.rgb, (outlineIntensity * _OutlineIntensity) * distanceFalloff);

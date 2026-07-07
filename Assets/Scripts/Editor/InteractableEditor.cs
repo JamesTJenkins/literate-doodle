@@ -28,7 +28,7 @@ public class InteractableEditor : Editor {
 	public override void OnInspectorGUI() {
 		serializedObject.Update();
 
-		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+		Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include);
 
 		DisplayNames(allInstances);
 		EditorGUILayout.PropertyField(interactType);
@@ -63,7 +63,7 @@ public class InteractableEditor : Editor {
 
 		if ((InteractType)interactType.enumValueIndex == InteractType.Key) {
 			Handles.color = Color.red;
-			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include);
 			foreach (Interactable instance in allInstances) {
 				if (instance.interactType == InteractType.Door && instance.doorCode == doorCode.stringValue) {
 					Handles.SphereHandleCap(0, instance.transform.position, Quaternion.identity, 1f, EventType.Repaint);
@@ -73,7 +73,7 @@ public class InteractableEditor : Editor {
 
 		if ((InteractType)interactType.enumValueIndex == InteractType.Door) {
 			Handles.color = new Color(1f, 0f, 0f, .5f);	// So i can actually see the key when its highlighted
-			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include, UnityEngine.FindObjectsSortMode.None);
+			Interactable[] allInstances = FindObjectsByType<Interactable>(UnityEngine.FindObjectsInactive.Include);
 			foreach (Interactable instance in allInstances) {
 				if (instance.interactType == InteractType.Key && instance.doorCode == doorCode.stringValue) {
 					Handles.SphereHandleCap(0, instance.transform.position, Quaternion.identity, 1f, EventType.Repaint);
